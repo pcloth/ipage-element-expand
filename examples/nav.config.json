@@ -1,0 +1,91 @@
+{
+    "zh-CN": [
+        {
+            "name": "开发指南",
+            "path":"/docs",
+            "children": [
+                {
+                    "name": "更新日志",
+                    "path": "/changelog"
+                },
+                {
+                    "path": "/quickstart",
+                    "name": "快速上手"
+                }
+            ]
+        },
+        {
+            "name": "组件",
+            "path": "/component",
+            "layout": true,
+            "groups": [
+                {
+                    "groupName": "RenderCell 渲染单元",
+                    "list": [
+                        {
+                            "path": "/RenderCell/base",
+                            "title": "基本用法"
+                        },
+                        {
+                            "path": "/RenderCell/inForm",
+                            "title": "在表单中使用"
+                        },
+                        {
+                            "path":"/RenderCell/item",
+                            "title":"RenderCell 属性"
+                        },
+                        {
+                            "path":"/RenderCell/slot_element",
+                            "title":"slot 渲染element-ui组件"
+                        },
+                        {
+                            "path":"/RenderCell/slot_exp",
+                            "title":"slot 渲染扩展组件"
+                        }
+                    ]
+                },
+                {
+                    "groupName": "业务封装组件",
+                    "list": [
+                        {
+                            "path": "/ISearch",
+                            "title": "ISearch 搜索"
+                        },
+                        {
+                            "path": "/ITable",
+                            "title": "ITable 表格"
+                        },
+                        {
+                            "path": "/IForm",
+                            "title": "IForm 表单"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "配置",
+            "path": "/config",
+            "layout": true,
+            "groups": [
+                {
+                    "groupName": "全局配置",
+                    "list": [
+                        {
+                            "path": "/config/GlobalConfig",
+                            "title": "GlobalConfig 配置方法"
+                        },
+                        {
+                            "path": "/config/style",
+                            "title": "style 样式配置"
+                        },
+                        {
+                            "path": "/config/IPageConfig",
+                            "title": "IPage 组件相关配置"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
