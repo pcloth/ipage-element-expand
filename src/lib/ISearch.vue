@@ -4,12 +4,12 @@
         :model="form"
         v-if="!hideSearch"
         :class="className"
-        v-bind="formProps"
+        v-bind="mergeFormProps"
     >
         <template v-for="(v, k) in searchItems">
             <RenderCell
                 :ref="v.id"
-                v-if="!v.isMore||!allinMore"
+                v-if="!v.isMore&&!allinMore"
                 :item="v"
                 :key="k"
                 :allItems="searchItems"
@@ -269,6 +269,12 @@ export default {
                 }
             }
             return deepAssign(rcellData,this.searchResetButton?this.searchResetButton:{show:false})
+        },
+        mergeFormProps(){
+            return {
+                ...$c.get('searchFormProps'),
+                ...this.formProps
+            }
         }
     },
     watch:{
