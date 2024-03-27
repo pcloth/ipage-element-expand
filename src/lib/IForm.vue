@@ -147,7 +147,7 @@ export default {
     },
     data(){
         return {
-            form:{...(this.value||{})},
+            form:this.value,
             submitLoading:false,
             initForm:false
         }
