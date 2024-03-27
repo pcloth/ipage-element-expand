@@ -45,18 +45,6 @@ export const deepAssign = (source, target) => {
             if (Array.isArray(obj2)) {
                 // 数组替换
                 result[key] = obj2;
-                // const l1 = obj1.length;
-                // const l2 = obj2.length;
-                // const length = Math.max(l1, l2);
-                // for (let i = 0; i < length; i++) {
-                //     if (effectiveValue(obj2[i])) {
-                //         if (typeof obj1[i] === "object") {
-                //             result[key][i] = deepAssign(obj1[i], obj2[i]);
-                //         } else {
-                //             result[key][i] = obj2[i];
-                //         }
-                //     }
-                // }
             } else if (typeof obj1 === "object" && typeof obj2 === "object") {
                 // 对象继续合并
                 result[key] = deepAssign(obj1, obj2);
@@ -128,11 +116,23 @@ export const getEvents = (item, onName, row) => {
 /** 递归一个对象里面的，如果是方法，使用toEventsAppendParams包装 */
 export const toEventsAppendParamsDeep = (obj, row, that) => {
     const result = {};
+    if(!obj) return obj;
+    if(typeof obj==='string'){
+        return obj;
+    }
     for (const key in obj) {
         if (Object.hasOwnProperty.call(obj, key)) {
             const value = obj[key];
             if (typeof value === "function") {
                 result[key] = _toEventsAppendParams_(value, key, row, that)
+            }else if(Array.isArray(value)){
+                if(value.length>0){
+                    result[key] = value.map(item=>{
+                        return toEventsAppendParamsDeep(item, row, that)
+                    })
+                }else{
+                    result[key] = value;
+                }
             } else if (typeof value === "object") {
                 result[key] = toEventsAppendParamsDeep(value, row, that);
             } else {
