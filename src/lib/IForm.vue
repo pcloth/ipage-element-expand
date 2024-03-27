@@ -3,14 +3,14 @@
              v-loading="loading">
         <el-row>
             <el-col :span="v.span ? v.span : 12" v-for="v in formItems" :key="v.id">
-                <RenderCell v-model="form[v.id]" :key="v.id" :item="v" :allItems="formItems" :formData="form" defaultSlot="input">
+                <RenderCell v-model="form[v.id]" :key="v.id" :item="v" :allItems="formItems" :formData="form" :qData="qData" defaultSlot="input">
                 </RenderCell>
             </el-col>
             <el-col class="ipage_iform_buttons" :span="24" v-if="canShowButton">
-                <RenderCell v-if="canShowSubmitButton" :item="mergeSubmitButton"/>
-                <RenderCell v-if="canShowCancelButton" :item="mergeCancelButton"/>
+                <RenderCell v-if="canShowSubmitButton" :item="mergeSubmitButton" :qData="qData"/>
+                <RenderCell v-if="canShowCancelButton" :item="mergeCancelButton" :qData="qData"/>
                 <template v-for="btn in expandButtons">
-                    <RenderCell v-model="form[v.id]" :item="btn" :key="btn.id" :formData="form" :allItems="expandButtons"
+                    <RenderCell v-model="form[v.id]" :item="btn" :key="btn.id" :formData="form" :qData="qData" :allItems="expandButtons"
                                 defaultSlot="button"></RenderCell>
                 </template>
             </el-col>
@@ -140,6 +140,10 @@ export default {
             type:Boolean,
             default:false
         },
+        qData:{
+            type:Object,
+            default:()=>{}
+        }
     },
     data(){
         return {
