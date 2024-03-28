@@ -3,7 +3,7 @@
              v-loading="loading">
         <el-row>
             <el-col :span="v.span ? v.span : 12" v-for="v in formItems" :key="v.id">
-                <RenderCell v-model="form[v.id]" :key="v.id" :item="v" :allItems="formItems" :formData="form" :qData="qData" defaultSlot="input">
+                <RenderCell v-model="form[v.id]" :input="(nv)=>$set(form,v.id,nv)" :key="v.id" :item="v" :allItems="formItems" :formData="form" :qData="qData" defaultSlot="input">
                 </RenderCell>
             </el-col>
             <el-col class="ipage_iform_buttons" :span="24" v-if="canShowButton">
