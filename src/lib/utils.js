@@ -119,6 +119,12 @@ export const toEventsAppendParamsDeep = (obj, row, that) => {
     if(!obj) return obj;
     if(typeof obj==='string'){
         return obj;
+    }else if(obj instanceof Function){
+        return _toEventsAppendParams_(obj, '', row, that)
+    }else if(obj instanceof Date){
+        return obj;
+    }else if(obj instanceof RegExp){
+        return obj;
     }
     for (const key in obj) {
         if (Object.hasOwnProperty.call(obj, key)) {

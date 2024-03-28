@@ -8,7 +8,7 @@
 # TODO LIST
 - [ ] 完善文档
 - [ ] 优化组件库
-- [ ] 发布到npm
+- [x] 发布到npm
 
 # 文档
 [点击查看文档](https://pcloth.github.io/ipage-element-expand/#/zh-CN/docs/quickstart)

@@ -1,6 +1,6 @@
 {
     "name": "ipage-element-expand",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "keywords": [
         "ipage",
         "iform",
@@ -19,6 +19,7 @@
         "build:docs": "vue-cli-service build",
         "build:lib": "vue-cli-service build --dest dist --target lib --name index src/index.js",
         "build:npm":"node build/webpack.lib.js",
+        "auto:npm":"npm run build:npm && cd dist & npm publish && cd ..",
         "lint": "vue-cli-service lint",
         "open": "dev serve -o docs"
     },
