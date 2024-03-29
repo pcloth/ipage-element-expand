@@ -51,15 +51,15 @@
                     "groupName": "业务封装组件",
                     "list": [
                         {
-                            "path": "/ISearch",
+                            "path": "/component/ISearch",
                             "title": "ISearch 搜索"
                         },
                         {
-                            "path": "/ITable",
+                            "path": "/component/ITable",
                             "title": "ITable 表格"
                         },
                         {
-                            "path": "/IForm",
+                            "path": "/component/IForm",
                             "title": "IForm 表单"
                         }
                     ]
@@ -76,15 +76,15 @@
                     "groupName": "全局配置",
                     "list": [
                         {
-                            "path": "/GlobalConfig",
+                            "path": "/config/GlobalConfig",
                             "title": "GlobalConfig 配置方法"
                         },
                         {
-                            "path": "/style",
+                            "path": "/config/style",
                             "title": "style 样式配置"
                         },
                         {
-                            "path": "/IPageConfig",
+                            "path": "/config/IPageConfig",
                             "title": "IPage 组件相关配置"
                         }
                     ]

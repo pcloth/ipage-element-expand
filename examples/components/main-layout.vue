@@ -1,7 +1,7 @@
 <template>
-    <div class="main-container">
+    <div class="main-container-doc">
         <div class="left-menus">
-            <side-nav :data="menus" :base="basePath"></side-nav>
+            <side-nav :data="menus" :base="`/${lang}`"></side-nav>
         </div>
         <div class="page-component">
             <router-view />
@@ -33,13 +33,6 @@ export default {
                 return [this.menuObj]
             }
             return []
-        },
-        basePath(){
-            return "/"
-            if(this.menuObj){
-                return this.menuObj.path
-            }
-            return "/"
         }
     },
     mounted(){
@@ -50,5 +43,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.main-container-doc {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 20px 40px 20px 40px;
+    display: flex;
+    flex: 1;
+}
 </style>

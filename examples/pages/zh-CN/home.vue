@@ -13,16 +13,19 @@
             </ul>
             <div class="start-button-box">
                 <div class="card">
-                    <!-- <img src="static/guide.0a8462c.png" alt=""> -->
-                    <h3>组件</h3>
-                    <p>使用组件 Demo 快速体验交互细节；使用前端框架封装的代码帮助工程师快速开发。</p>
-                    <el-button type="primary">查看详情</el-button>
+                    <h3>指南</h3>
+                    <p>快速安装部署。</p>
+                    <a href="#/zh-CN/guide" class="">查看详情</a>
                 </div>
                 <div class="card">
-                    <!-- <img src="static/guide.0a8462c.png" alt=""> -->
+                    <h3>组件</h3>
+                    <p>使用组件 Demo 快速体验交互细节；使用前端框架封装的代码帮助工程师快速开发。</p>
+                    <a href="#/zh-CN/component" class="">查看详情</a>
+                </div>
+                <div class="card">
                     <h3>全局配置</h3>
                     <p>使用全局配置，定义样式，默认行为和扩展组件。</p>
-                    <el-button type="success">查看详情</el-button>
+                    <a href="#/zh-CN/config" class="">查看详情</a>
                 </div>
             </div>
         </div>
@@ -42,7 +45,6 @@ export default {
 .home-page {
     padding: 20px;
     padding-bottom: 50px;
-    background-color: #f7fbfd;
     display: flex;
     flex: 1;
     .welcome {
@@ -50,7 +52,6 @@ export default {
         color: #555;
         margin: 0 auto;
         width: 80%;
-        max-width: 600px;
         .center {
             font-size: 20px;
             color: #333;
@@ -67,7 +68,7 @@ export default {
     }
     .start-button-box {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 20px;
         margin-top: 58px;
     }
@@ -88,6 +89,27 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    a {
+        height: 53px;
+        line-height: 52px;
+        font-size: 14px;
+        color: #409eff;
+        text-align: center;
+        border: 0;
+        border-top: 1px solid #eaeefb;
+        padding: 0;
+        cursor: pointer;
+        width: 100%;
+        background-color: #fff;
+        border-radius: 0 0 5px 5px;
+        transition: all .3s;
+        text-decoration: none;
+        display: block;
+        &:hover {
+            color: #fff;
+            background: #409eff;
+        }
+    }
 }
 .card:hover {
     bottom: 6px;

@@ -45,7 +45,7 @@ const registerRoute = (navConfig) => {
                         lang
                     },
                     path: `/${lang}${nav.path}`,
-                    // redirect: nav.redirect?`/${lang}${nav.redirect}`:'',
+                    redirect: nav.redirect?`/${lang}${nav.redirect}`:undefined,
                     component: () => import('./components/main-layout'),
                     children: []
                 });
@@ -69,9 +69,8 @@ const registerRoute = (navConfig) => {
     });
     function addRoute(page, lang, index,pageIndex) {
         const component = loadDocs(lang, page.path);
-        console.log(page.path,'<<add',component?true:false);
         let child = {
-            path: page.path,
+            path: `/${lang}`+page.path,
             meta: {
                 title: page.title || page.name,
                 description: page.description,
