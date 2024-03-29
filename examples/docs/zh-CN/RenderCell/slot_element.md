@@ -1,5 +1,3 @@
-## slot 类型说明
-
 ## 当前支持的全部的element-ui组件表
 |slot值|element-ui组件|说明|
 |--|--|--|

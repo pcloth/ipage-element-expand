@@ -7,7 +7,8 @@ const md = require('./config');
 
 module.exports = function(source) {
   const content = md.render(source);
-
+  // 生成菜单代码
+  const menuHtml = md.bus.menus
   const startTag = '<!--element-demo:';
   const startTagLen = startTag.length;
   const endTag = ':element-demo-->';
@@ -15,7 +16,7 @@ module.exports = function(source) {
 
   let componenetsString = '';
   let id = 0; // demo 的 id
-  let output = []; // 输出的内容
+  let output = [menuHtml]; // 输出的内容
   let start = 0; // 字符串开始位置
 
   let commentStart = content.indexOf(startTag);
