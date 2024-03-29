@@ -2,14 +2,16 @@
     "zh-CN": [
         {
             "name": "开发指南",
-            "path":"/docs",
+            "path":"/guide",
+            "layout": true,
+            "redirect":"/guide/quickstart",
             "children": [
                 {
                     "name": "更新日志",
-                    "path": "/changelog"
+                    "path": "/guide/changelog"
                 },
                 {
-                    "path": "/quickstart",
+                    "path": "/guide/quickstart",
                     "name": "快速上手"
                 }
             ]
@@ -18,28 +20,29 @@
             "name": "组件",
             "path": "/component",
             "layout": true,
+            "redirect":"/component/RenderCell/base",
             "groups": [
                 {
                     "groupName": "RenderCell 渲染单元",
                     "list": [
                         {
-                            "path": "/RenderCell/base",
+                            "path": "/component/RenderCell/base",
                             "title": "基本用法"
                         },
                         {
-                            "path": "/RenderCell/inForm",
+                            "path": "/component/RenderCell/inForm",
                             "title": "在表单中使用"
                         },
                         {
-                            "path":"/RenderCell/item",
+                            "path":"/component/RenderCell/item",
                             "title":"RenderCell 属性"
                         },
                         {
-                            "path":"/RenderCell/slot_element",
+                            "path":"/component/RenderCell/slot_element",
                             "title":"slot 渲染element-ui组件"
                         },
                         {
-                            "path":"/RenderCell/slot_exp",
+                            "path":"/component/RenderCell/slot_exp",
                             "title":"slot 渲染扩展组件"
                         }
                     ]
@@ -67,20 +70,21 @@
             "name": "配置",
             "path": "/config",
             "layout": true,
+            "redirect":"/config/GlobalConfig",
             "groups": [
                 {
                     "groupName": "全局配置",
                     "list": [
                         {
-                            "path": "/config/GlobalConfig",
+                            "path": "/GlobalConfig",
                             "title": "GlobalConfig 配置方法"
                         },
                         {
-                            "path": "/config/style",
+                            "path": "/style",
                             "title": "style 样式配置"
                         },
                         {
-                            "path": "/config/IPageConfig",
+                            "path": "/IPageConfig",
                             "title": "IPage 组件相关配置"
                         }
                     ]

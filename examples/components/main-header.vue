@@ -7,7 +7,7 @@
             <div class="f-right">
                 <!-- 语言选择器 -->
                 <!-- <li class="nav-item lang-item"> -->
-                    <el-dropdown trigger="click" class="nav-dropdown nav-lang" :class="{ 'is-active': langDropdownVisible }">
+                    <!-- <el-dropdown trigger="click" class="nav-dropdown nav-lang" :class="{ 'is-active': langDropdownVisible }">
                         <span>
                             {{ displayedLang }}
                             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -17,7 +17,7 @@
                                 {{ value }}
                             </el-dropdown-item>
                         </el-dropdown-menu>
-                    </el-dropdown>
+                    </el-dropdown> -->
                 <!-- </li> -->
                 <navs :menus="outside" />
             </div>
@@ -38,7 +38,9 @@ export default {
             userLanguage: userLanguage,
             navs: [
                 { label: "首页", router: "/" },
-                { label: "文档", router: `/${userLanguage}/docs` }
+                { label: "开发指南", router: `/${userLanguage}/guide` },
+                { label: "组件", router: `/${userLanguage}/component` },
+                { label: "全局配置", router: `/${userLanguage}/config` }
             ],
             outside: [
                 { label: "Github", link: this.$root.pkg.github },

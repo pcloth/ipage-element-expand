@@ -1,58 +1,77 @@
 import navConfig from './nav.config';
 import langs from './i18n/route';
 
-const LOAD_DOCS_MAP = {
-    'zh-CN': path => {
-        return r => require.ensure([], () =>
-            r(require(`./docs/zh-CN${path}.md`)),
-            'zh-CN');
-    },
-    'en-US': path => {
-        return r => require.ensure([], () =>
-            r(require(`./docs/en-US${path}.md`)),
-            'en-US');
-    }
+/** 加载pages路径下的vue页面 */
+/** 加载pages路径下的vue页面 */
+const loadVue = (lang, path) => {
+    return r => import(`./pages/${lang}/${path}.vue`)
+        .then(module => r(module.default))
+        .catch(error => console.error('加载vue页面出错', error));// eslint-disable-line
 };
 
-const loadDocs = function (lang, path) {
-    console.log(path,'path');
-    return LOAD_DOCS_MAP[lang](path);
+/** 加载docs路径下的MD文档 */
+const loadDocs = (lang, path) => {
+    return r => import(`./docs/${lang}${path}.md`)
+        .then(module => r(module.default))
+        .catch(error => console.error('加载文档出错', error));// eslint-disable-line
 };
 
 const registerRoute = (navConfig) => {
     const route = [];
     Object.keys(navConfig).forEach((lang, index) => {
         const navs = navConfig[lang];
+        // 语言层
         route.push({
-            path: `/${lang}/docs`,
-            redirect: `/${lang}/docs/changelog`,
-            component: () => import('./components/main-layout'),
-            children: []
+            path: `/${lang}`,
+            name:'home',
+            redirect:`/${lang}/home`,
+            component: () => import('./components/home-layout'),
+            children: [
+                {
+                    path: `/${lang}/home`,
+                    name: 'home-index',
+                    component: loadVue(lang, 'home')
+                }
+            ]
         });
-        navs.forEach(nav => {
+        navs.forEach((nav,pageIndex) => {
             if (nav.href) return;
+            
             if (nav.layout) {
-                nav.component = () => import('./components/main-layout')
+                // 大分类 
+                route[index].children.push({
+                    meta: {
+                        title: nav.title || nav.name,
+                        lang
+                    },
+                    path: `/${lang}${nav.path}`,
+                    // redirect: nav.redirect?`/${lang}${nav.redirect}`:'',
+                    component: () => import('./components/main-layout'),
+                    children: []
+                });
             }
+
+            // 分组和小页面
             if (nav.groups) {
                 nav.groups.forEach(group => {
                     group.list.forEach(nav => {
-                        addRoute(nav, lang, index);
+                        addRoute(nav, lang, index,pageIndex);
                     });
                 });
             } else if (nav.children) {
                 nav.children.forEach(nav => {
-                    addRoute(nav, lang, index);
+                    addRoute(nav, lang, index,pageIndex);
                 });
             } else {
-                addRoute(nav, lang, index);
+                addRoute(nav, lang, index,pageIndex);
             }
         });
     });
-    function addRoute(page, lang, index) {
+    function addRoute(page, lang, index,pageIndex) {
         const component = loadDocs(lang, page.path);
+        console.log(page.path,'<<add',component?true:false);
         let child = {
-            path: page.path.slice(1),
+            path: page.path,
             meta: {
                 title: page.title || page.name,
                 description: page.description,
@@ -61,8 +80,7 @@ const registerRoute = (navConfig) => {
             name: 'component-' + lang + (page.title || page.name),
             component: component.default || component
         };
-
-        route[index].children.push(child);
+        route[index].children[pageIndex+1].children.push(child);
     }
 
     return route;
@@ -75,7 +93,7 @@ const generateMiscRoutes = function (lang) {
         path: `/${lang}`, // 首页
         meta: { lang },
         name: 'home' + lang,
-        component: loadDocs(lang, `/index`)
+        component: loadVue(lang, `home`)
     };
 
     return [
@@ -83,9 +101,9 @@ const generateMiscRoutes = function (lang) {
     ];
 };
 
-langs.forEach(lang => {
-    route = route.concat(generateMiscRoutes(lang.lang));
-});
+// langs.forEach(lang => {
+//     route = route.concat(generateMiscRoutes(lang.lang));
+// });
 
 
 let userLanguage = localStorage.getItem('ELEMENT_LANGUAGE') || window.navigator.language || 'zh-CN';

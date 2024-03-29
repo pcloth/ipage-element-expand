@@ -23,7 +23,7 @@
         "lint": "vue-cli-service lint",
         "open": "dev serve -o docs"
     },
-    "website": "https://lanyueos.com",
+    "website": "https://github.com/pcloth/ipage-element-expand",
     "github": "https://github.com/pcloth/ipage-element-expand",
     "homepage": "https://github.com/pcloth/ipage-element-expand",
     "repository": {
