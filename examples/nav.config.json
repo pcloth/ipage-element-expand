@@ -61,6 +61,10 @@
                         {
                             "path": "/component/IForm",
                             "title": "IForm 表单"
+                        },
+                        {
+                            "path":"/component/IPage",
+                            "title":"IPage 整体页面"
                         }
                     ]
                 }
