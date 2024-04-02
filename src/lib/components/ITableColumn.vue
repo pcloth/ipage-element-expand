@@ -100,6 +100,7 @@ export default {
                 $column:this,
             };
         const makeNode = (ff,key)=>{
+            console.log(ff,typeof ff,'>>>>');
             if(typeof ff==='function'){
                 return _toEventsAppendParams_(ff,key,loadData,this)
             }else if(isVNode(ff)){
@@ -113,15 +114,16 @@ export default {
                 return ()=>{
                     return <RenderCell isFormItem={false} item={ff}></RenderCell> 
                 } 
-            }else if(isVNode(ff.render)){
+            }else if(ff && ff.render && isVNode(ff.render)){
                     return ()=>ff.render
             } else{
-                throw "scopedSlots参数只支持三种类型：cell参数、函数、vNode对象"
+                return null
+                // throw "scopedSlots参数只支持三种类型：cell参数、函数、vNode对象"
             }
         }
-        Object.keys(scopedSlots).forEach(key=>{
-            scopedSlots[key] = makeNode(scopedSlots[key],key)
-        })
+        // Object.keys(scopedSlots).forEach(key=>{
+        //     scopedSlots[key] = makeNode(scopedSlots[key],key)
+        // })
         
         if(this.item.cell){
             scopedSlots.default = (scope)=>{
