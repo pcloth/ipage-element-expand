@@ -22,6 +22,7 @@
 |options|[array,function,async function]|select、radio-group、checkbox-group子组件的options（TODO：这里需要调整）|[]|
 |directives|array|自定义指令数据|[]|
 |debounce|boolen,number|v-model是否需要额外的防抖，当`slot="time-picker"`时自动赋予|`undefined`|
+|render|jsx function|当slot='render'的时候生效，直接渲染dom|无|
 |slots|object|用于组件的插槽|{}|
 |props|object|传递给原生组件的props，如果其中有function类型，会自动添加loadData数据|{}|
 |on|object|传递给原生组件的on,用于接收组件的emit事件，会自动添加loadData数据|{}|
