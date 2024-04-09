@@ -6,12 +6,12 @@
         :class="className"
         v-bind="mergeFormProps"
     >
-        <template v-for="(v, k) in searchItems">
+        <template v-for="v in searchItems">
             <RenderCell
                 :ref="v.id"
                 v-if="!v.isMore&&!allinMore"
                 :item="v"
-                :key="k"
+                :key="v.id"
                 :allItems="searchItems"
                 v-model="form[v.id]"
                 :formData="form"
@@ -93,9 +93,9 @@
         </el-form-item>
         <!-- 扩展按钮 -->
         <RenderCell
-            v-for="(v, k) in expandButtons"
+            v-for="v in expandButtons"
             :item="v"
-            :key="k"
+            :key="v.id"
             :allItems="expandButtons"
             :formData="form"
             defaultSlot="button"
