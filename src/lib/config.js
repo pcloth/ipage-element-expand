@@ -169,11 +169,9 @@ export const config = {
         searchFormProps:{
             inline:true
         },
-        searchInput:{
-            props:{
-                size:'small',
-                clearable:true,    
-            }
+        searchInputProps:{
+            size:'small',
+            clearable:true,    
         },
         searchButton:{
             props:{

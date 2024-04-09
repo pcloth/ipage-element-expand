@@ -16,7 +16,7 @@
                 v-model="form[v.id]"
                 :formData="form"
                 defaultSlot="input"
-                :defaultProp="inputProp"
+                :defaultProp="mergeInputProps"
                 @change="handleChange"
             ></RenderCell>
         </template>
@@ -84,7 +84,7 @@
                         :formData="form"
                         defaultSlot="input"
                         @change="handleChange"
-                        :defaultProp="inputProp"
+                        :defaultProp="mergeInputProps"
                     ></RenderCell>
                 </template>
             </div>
@@ -275,7 +275,13 @@ export default {
                 ...$c.get('searchFormProps'),
                 ...this.formProps
             }
-        }
+        },
+        mergeInputProps(){
+            return {
+                ...$c.get('searchInputProps'),
+                ...this.inputProp
+            }
+        },
     },
     watch:{
         form(val){
