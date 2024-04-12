@@ -1,6 +1,7 @@
 <template>
     <div class="home-page">
         <div class="welcome">
+            <!-- <RenderCell :item="selectboxItem"></RenderCell> -->
             <h3 class="center">高阶Element UI封装库</h3>
             <ul class="core-function">
                 <li>快速的完成<span class="eye-catching">增删改查</span>等常规页面</li>
@@ -35,7 +36,24 @@
 
 <script>
 export default {
-
+    data(){
+        return {
+            // selectboxItem:{
+            //     id:'selectbox',
+            //     slot:'select-more',
+            //     isFormItem:false,
+            //     props:{
+            //         service:async (params)=>{
+            //             return new Promise((resolve,reject)=>{
+            //                 setTimeout(()=>{
+            //                     resolve({data:{records:[{label:'测试',value:1}],total:0}})
+            //                 },3000)
+            //             })
+            //         }
+            //     }
+            // }
+        }
+    }
 }
 </script>
 
