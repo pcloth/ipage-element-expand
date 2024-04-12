@@ -156,7 +156,6 @@ export default {
     async created() {
         this.getList = preventRepeat((params)=>this._getList(params), 500);
         this.init();
-        window.tt = this;
     },
     methods: {
         getValueByPath(obj, path) {
