@@ -41,7 +41,7 @@ export default {
         },
         labelField: {
             type: String,
-            default: 'name',
+            default: 'label',
         },
         valueField: {
             type: String,
