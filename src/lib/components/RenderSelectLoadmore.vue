@@ -13,30 +13,27 @@
             <i v-if="customLoading" class="el-icon-loading"></i>
         </div>
         <div :class="[customLoading ? 'selectLoad' : 'noData']">
-            <el-option-group :label="echoGroupTitle">
-                <el-option v-for="(item, index) in echoOptions" :key="item[keyField] ? item[keyField] : index" :label="getLabel(item)"
+            <template v-for="(item, index) in echoOptions">
+                <el-option v-if="canShowEcho(item)" :key="item[keyField] ? item[keyField] : index" :label="getLabel(item)"
+                           :value="item[valueField]" :disabled="disabledFunc(item)" />
+            </template>
+            <el-option v-for="(item, index) in options" :key="item[keyField] ? item[keyField] : index" :label="getLabel(item)"
                        :value="item[valueField]" :disabled="disabledFunc(item)" />
-            </el-option-group>
-            <el-option-group :label="searchGroupTitle">
-                <el-option v-for="(item, index) in options" :key="item[keyField] ? item[keyField] : index" :label="getLabel(item)"
-                       :value="item[valueField]" :disabled="disabledFunc(item)" />
-            </el-option-group>
-            
         </div>
     </el-select>
 </template>
 <script>
-import { Select } from "element-ui";
+import { Select } from 'element-ui';
 const { props: elSelectProps } = Select;
-import { config as $c } from "../config";
-import { getPathValue,preventRepeat } from "../utils";
+import { config as $c } from '../config';
+import { getPathValue, preventRepeat } from '../utils';
 
 export default {
     props: {
         ...elSelectProps,
         value: {
             type: [String, Object, Number, Boolean, Array],
-            default: "",
+            default: '',
         },
         service: {
             type: Function,
@@ -44,22 +41,22 @@ export default {
         },
         labelField: {
             type: String,
-            default: "name",
+            default: 'name',
         },
         valueField: {
             type: String,
-            default: "value",
+            default: 'value',
         },
         keyField: {
             type: String,
-            default: "id",
+            default: 'id',
         },
         /**
          * 接口查询的字段，默认 keyword
          */
         searchKey: {
             type: String,
-            default: "keyword",
+            default: 'keyword',
         },
         /**
          * 额外要传入的参数
@@ -86,17 +83,9 @@ export default {
         labelFunc: {
             type: Function,
         },
-        echoGroupTitle:{
-            type: String,
-            default: "回显数据",
-        },
-        searchGroupTitle:{
-            type: String,
-            default: "搜索数据",
-        },
         placeholder: {
             type: String,
-            default: "搜索选择",
+            default: '搜索选择',
         },
         echoFunc: {
             type: Function,
@@ -108,28 +97,25 @@ export default {
             params: {
                 pageNo: 1,
                 pageSize: 10,
-                keyword: "",
+                keyword: '',
             },
             customLoading: false,
             // 用于滚动刷新
             that: this,
             options: [],
             echoOptions: [],
-            queryWord: "",
+            queryWord: '',
             total: 0,
         };
     },
     directives: {
-        "el-select-loadmore": {
+        'el-select-loadmore': {
             bind(el, binding) {
                 const componentInstance = binding.value;
-                const scrollDom = el.querySelector(".el-select-dropdown__wrap");
+                const scrollDom = el.querySelector('.el-select-dropdown__wrap');
                 if (scrollDom) {
-                    scrollDom.addEventListener("scroll", () => {
-                        if (
-                            scrollDom.scrollTop + scrollDom.clientHeight >=
-                            scrollDom.scrollHeight - 4
-                        ) {
+                    scrollDom.addEventListener('scroll', () => {
+                        if (scrollDom.scrollTop + scrollDom.clientHeight >= scrollDom.scrollHeight - 4) {
                             componentInstance.handleScrollToEnd();
                         }
                     });
@@ -145,7 +131,7 @@ export default {
             immediate: true,
         },
         customValue(val) {
-            this.$emit("input", val);
+            this.$emit('input', val);
         },
     },
     computed: {
@@ -154,12 +140,17 @@ export default {
         },
     },
     async created() {
-        this.getList = preventRepeat((params)=>this._getList(params), 500);
+        this.getList = preventRepeat((params) => this._getList(params), 500);
         this.init();
+        window.tt = this;
     },
     methods: {
+        canShowEcho(item){
+            // 如果item已经在options中，不显示
+            return !this.options.some((it) => it[this.valueField] === item[this.valueField]);
+        },
         getValueByPath(obj, path) {
-            const keys = path.split(".");
+            const keys = path.split('.');
             let result = obj;
             for (let key of keys) {
                 result = result[key];
@@ -168,29 +159,27 @@ export default {
             return result;
         },
         getLabel(item) {
-            if(this.labelFunc){
+            if (this.labelFunc) {
                 return this.labelFunc(item);
             }
             if (this.labelFieldArr.length === 0) {
                 return item[this.labelField];
             } else {
-                return this.labelFieldArr
-                    .map((field) => this.getValueByPath(item, field))
-                    .join(" - ");
+                return this.labelFieldArr.map((field) => this.getValueByPath(item, field)).join(' - ');
             }
         },
         async init() {
             this.total = 0;
-            this.queryWord = "";
+            this.queryWord = '';
             this.params.pageNo = 1;
             this.options = [];
-            if(this.value && this.echoFunc && !this.echoOptions.length){
+            if (this.value && this.echoFunc && !this.echoOptions.length) {
                 // 没有回显数据的时候才调用
                 this.echoOptions = await this.echoFunc();
             }
         },
         handleVisibleChange(show) {
-            if(show){
+            if (show) {
                 if (this.options.length === 0) {
                     this.init();
                     this.getList();
@@ -199,42 +188,37 @@ export default {
         },
         handleClear() {
             this.echoOptions = [];
-            this.init()
+            this.init();
         },
         handleChange(args) {
             if (Array.isArray(args)) {
                 // 多选
-                const selected = this.options.filter((it) =>
-                    args.includes(it[this.valueField])
-                );
+                const selected = this.options.filter((it) => args.includes(it[this.valueField]));
                 this.echoOptions = selected;
-                this.$emit("getCurrentItem", selected, args);
+                this.$emit('getCurrentItem', selected, args);
             } else {
                 // 单选
-                const currentItem = this.options.find(
-                    (it) => it[this.valueField] === args
-                );
+                const currentItem = this.options.find((it) => it[this.valueField] === args);
                 this.echoOptions = [currentItem];
-                this.$emit("getCurrentItem", currentItem, args);
+                this.$emit('getCurrentItem', currentItem, args);
             }
         },
         realPageParams() {
             // 根据search.mode参数配置分页参数
-            const searchOptions = $c.get("search");
+            const searchOptions = $c.get('search');
             let params = {};
             if (searchOptions.beforeFunc) {
                 params = searchOptions.beforeFunc(this.params);
-            } else if (searchOptions.mode === "page") {
+            } else if (searchOptions.mode === 'page') {
                 params[searchOptions.pageNo] = this.params.pageNo;
                 params[searchOptions.pageSize] = this.params.pageSize;
-            } else if (searchOptions.mode === "offset") {
-                params[searchOptions.offset] =
-                    (this.params.pageNo - 1) * this.params.pageSize;
+            } else if (searchOptions.mode === 'offset') {
+                params[searchOptions.offset] = (this.params.pageNo - 1) * this.params.pageSize;
                 params[searchOptions.limit] = this.params.pageSize;
             }
             return params;
         },
-        getList(){},
+        getList() {},
         async _getList(query) {
             try {
                 this.customLoading = true;
@@ -243,16 +227,15 @@ export default {
                     ...this.realPageParams(),
                     ...this.additionalParams,
                 };
-                if(queryWord){
+                if (queryWord) {
                     params[this.searchKey] = queryWord;
                 }
                 const res = await this.service(params);
-                const keyPaths = $c.get("response");
+                const keyPaths = $c.get('response');
                 let data = [];
                 let total = 0;
                 if (keyPaths.beforeFunc) {
-                    const { data: data_, total: total_ } =
-                        keyPaths.beforeFunc(res);
+                    const { data: data_, total: total_ } = keyPaths.beforeFunc(res);
                     data = data_ || [];
                     total = total_ || 0;
                 } else {
@@ -262,11 +245,11 @@ export default {
                 this.options = [...this.options, ...data];
                 this.total = total;
             } catch (error) {
-                this.$message.error(error.message || "加载失败");
+                this.$message.error(error.message || '加载失败');
             } finally {
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.customLoading = false;
-                },200)
+                }, 200);
             }
         },
         handleRemoteSearch(query) {
@@ -288,7 +271,7 @@ export default {
 .selectLoad:after {
     position: relative;
     z-index: 1000;
-    content: "加载中...";
+    content: '加载中...';
     display: inline-block;
     text-align: center;
     color: #979797;
@@ -300,7 +283,7 @@ export default {
 .noData:after {
     position: relative;
     z-index: 1000;
-    content: "已经到底了";
+    content: '已经到底了';
     color: #979797;
     display: inline-block;
     text-align: center;
