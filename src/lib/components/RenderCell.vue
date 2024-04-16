@@ -18,6 +18,7 @@ import {config as $c} from '../config';
 import Renderer from "./Renderer.vue";
 import RenderCell from "./RenderCell.vue";
 import RSelectLoadMore from "./RenderSelectLoadmore"
+import SplitDownloadAndExport from "./SplitDownloadAndExport"
 
 const cellProps = {
     value: {
@@ -450,6 +451,10 @@ export default {
         case "popconfirm":
             needVModel = false;
             dom = <el-popconfirm ></el-popconfirm>;
+            break;
+        case "export":
+            needVModel = false;
+            dom = <SplitDownloadAndExport></SplitDownloadAndExport>;
             break;
         default:
             /** 自定义扩展组件，如果不需要配置数据、事件和v-model，请将loadData.$rcell上的几个参数关闭 */

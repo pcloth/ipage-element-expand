@@ -29,6 +29,7 @@ import { config as $c } from '../config';
 import { getPathValue, preventRepeat } from '../utils';
 
 export default {
+    name:'SelectMore',
     props: {
         ...elSelectProps,
         value: {
