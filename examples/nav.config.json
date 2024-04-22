@@ -40,10 +40,28 @@
                         {
                             "path":"/component/RenderCell/slot_element",
                             "title":"slot 渲染element-ui组件"
+                        }
+                        
+                    ]
+                },
+                {
+                    "groupName": "RenderCell 扩展组件",
+                    "list": [
+                        {
+                            "path": "/component/RenderCell/slot_exp_selectmore",
+                            "title": "select-more 下拉分页查询"
+                        },
+                        {
+                            "path": "/component/RenderCell/slot_exp_export",
+                            "title": "export 导出按钮"
+                        },
+                        {
+                            "path": "/component/RenderCell/slot_exp_render",
+                            "title": "render 渲染函数"
                         },
                         {
                             "path":"/component/RenderCell/slot_exp",
-                            "title":"slot 渲染扩展组件"
+                            "title":"slot 全局扩展配置"
                         }
                     ]
                 },
