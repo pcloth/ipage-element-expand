@@ -1,7 +1,7 @@
 <template>
     <div class="pageTemplate" :class="className">
         <slot name="search">
-            <ISearch ref="isearch" v-model="filter" v-bind="searchProps" :qData="realPageParams" @searchSuccess="searchSuccess"
+            <ISearch ref="isearch" @resetFields="$emit('resetFields')" v-model="filter" v-bind="searchProps" :qData="realPageParams" @searchSuccess="searchSuccess"
                      :search-items="searchItems" @beforeSearch="beforeSearch" @searchFail="searchFail" @searchFinally="searchFinally">
             </ISearch>
         </slot>

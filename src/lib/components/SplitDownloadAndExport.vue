@@ -13,6 +13,8 @@
 const ExportJsonExcel = require('js-export-excel');
 const JSZip = require('jszip');
 import { delObjectEmpty } from '../utils'
+import {config as $c} from '../config'
+
 const getButtonProps = () => {
     return {
         type: 'primary',
@@ -28,6 +30,7 @@ export default {
     name:'SplitDownloadAndExport',
     props: {
         /**
+         * Array<Object<key:value>>>
          * columns = [<key:value>]
          * key: 字段名，支持.分割
          * title: 标题
@@ -101,32 +104,32 @@ export default {
         },
         pageMode: {
             type: String,
-            default: 'page', // page 直接页码分页，offset 偏移量分页
+            default: $c.get('search.mode'), // page 直接页码分页，offset 偏移量分页
         },
         pageSizeKey: {
             type: String,
-            default: 'pageSize',
+            default: $c.get('search.pageSize'),
         },
         pageNumberKey: {
             type: String,
-            default: 'pageNo',
+            default: $c.get('search.pageNo'),
         },
         offsetKey: {
             type: String,
-            default: 'offset',
+            default: $c.get('search.offset'),
         },
         limitKey: {
             type: String,
-            default: 'limit',
+            default: $c.get('search.limit'),
         },
-        recordKey: {
+        dataPath: {
             type: String,
-            default: 'records',
+            default: $c.get('response.data'),
         },
         // 总条数key和路径，支持.分割
         totalPath: {
             type: String,
-            default: 'total',
+            default: $c.get('response.total'),
         },
         // 每多少条数据分割一次请求
         splitCount: {
@@ -176,10 +179,15 @@ export default {
     },
     methods: {
         async handleExportFile() {
+            this.$emit('clickExport')
             await this.handleExportFileSplit();
         },
-        getTotal(res) {
-            return this.totalPath.split('.').reduce((obj, key) => {
+        getResponse(res,keyPath){
+            const beforeFunc = $c.get('response.beforeFunc')
+            if(beforeFunc){
+                res = beforeFunc(res)
+            }
+            return this[keyPath].split('.').reduce((obj, key) => {
                 return obj[key];
             }, res);
         },
@@ -220,7 +228,7 @@ export default {
             }
             const params = this.getParamsPage(1, 1);
             const res = await this.queryApi(params);
-            const total = this.getTotal(res);
+            const total = this.getResponse(res,'totalPath');
             const pageCount = Math.ceil(total / this.splitCount);
             this.pageCount = pageCount;
             this.total = total;
@@ -305,7 +313,7 @@ export default {
                     let sheetData;
                     try {
                         const resp = await this.getThisPageData(i);
-                        sheetData = resp[this.recordKey];
+                        sheetData = this.getResponse(resp,'dataPath') || [];
                     } catch (error) {
                         this.handleExportError(error);
                         return;
@@ -396,13 +404,14 @@ export default {
         handleExportSuccess() {
             this.loading = false;
             this.$emit('success');
-            this.msg({ type: 'success', content: '导出成功' });
+
+            // this.msg({ type: 'success', content: '导出成功' });
         },
         // 导出失败
         handleExportError(err) {
             this.loading = false;
             this.$emit('error', err);
-            this.msg({ type: 'warning', content: err });
+            // this.msg({ type: 'warning', content: err });
         },
     },
 };
