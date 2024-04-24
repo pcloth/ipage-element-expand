@@ -62,6 +62,7 @@
         },
         methods:{
             async queryFunc(params){
+                console.log(params,'params')
                 return new Promise((resolve, reject) => {
                     const records = []
                     for(let i=0;i<10;i++){
@@ -183,11 +184,11 @@
                 },
                 expandButtons:[
                     {
-                        id:'export',
-                        tip:'导出',
+                        id:'customButton',
+                        tip:'自定义按钮',
                         on:{
                             click:()=>{
-                                alert('按下了导出按钮')
+                                alert('按下了自定义按钮按钮')
                             }
                         }
                     }

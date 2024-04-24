@@ -58,9 +58,6 @@ const cellProps = {
 const createDebounceUpdateValue = (id, that, timeout = 100,inputFunc) => {
     return debounceFn(val => {
         that.currentValue = val;
-        if(inputFunc){
-            inputFunc(val)
-        }
     }, timeout);
 };
 
@@ -87,6 +84,17 @@ export default {
         },
         currentValue(v){
             this.$emit('input',v)
+            if(this.item.on && this.item.on.input){
+                // 提交给item的input事件，方便从数据区获得变动，以便表单清空等操作触发
+                const loadData = {
+                    item: this.item,
+                    data: this.formData,
+                    qData: this.qData,
+                    allItems: this.allItems,
+                    $rcell:this
+                };
+                this.item.on.input(v,loadData)
+            }
         },
     },
     methods:{
@@ -516,9 +524,6 @@ export default {
         } else {
             dom.componentOptions.listeners['input'] = ($event)=>{
                 this.currentValue = $event
-                if(onEvent.input){
-                    onEvent.input($event)
-                }
             }
         }
         dom.data.attrs = {...dom.componentOptions.propsData}
@@ -555,17 +560,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-v-deep  .el-badge__content {
-  font-size: 12px;
-  height: 16px;
-  line-height: 15px;
-  vertical-align: middle;
+v-deep .el-badge__content {
+    font-size: 12px;
+    height: 16px;
+    line-height: 15px;
+    vertical-align: middle;
 }
 .radio-group-item-label {
-  margin-right: 3px;
-  vertical-align: middle;
+    margin-right: 3px;
+    vertical-align: middle;
 }
-v-deep  .el-radio-button__inner{
-  height: 34px;
+v-deep .el-radio-button__inner {
+    height: 34px;
 }
 </style>

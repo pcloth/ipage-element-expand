@@ -23,7 +23,18 @@ config.set({
             return {
                 item:{
                     slot:'demo',
+                    slots:{
+                        default:()=><span>点击看看</span>
+                    },
                     isFormItem:false,
+                    props:{
+                        type:'primary'
+                    },
+                    on:{
+                        click:()=>{
+                            alert('点击了自定义组件')
+                        }
+                    }
                 },
             }
         }
