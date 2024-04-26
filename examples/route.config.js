@@ -1,5 +1,4 @@
 import navConfig from './nav.config';
-import langs from './i18n/route';
 
 /** 加载pages路径下的vue页面 */
 /** 加载pages路径下的vue页面 */
@@ -23,8 +22,8 @@ const registerRoute = (navConfig) => {
         // 语言层
         route.push({
             path: `/${lang}`,
-            name:'home',
-            redirect:`/${lang}/home`,
+            name: 'home',
+            redirect: `/${lang}/home`,
             component: () => import('./components/home-layout'),
             children: [
                 {
@@ -34,9 +33,9 @@ const registerRoute = (navConfig) => {
                 }
             ]
         });
-        navs.forEach((nav,pageIndex) => {
+        navs.forEach((nav, pageIndex) => {
             if (nav.href) return;
-            
+
             if (nav.layout) {
                 // 大分类 
                 route[index].children.push({
@@ -45,7 +44,7 @@ const registerRoute = (navConfig) => {
                         lang
                     },
                     path: `/${lang}${nav.path}`,
-                    redirect: nav.redirect?`/${lang}${nav.redirect}`:undefined,
+                    redirect: nav.redirect ? `/${lang}${nav.redirect}` : undefined,
                     component: () => import('./components/main-layout'),
                     children: []
                 });
@@ -55,22 +54,22 @@ const registerRoute = (navConfig) => {
             if (nav.groups) {
                 nav.groups.forEach(group => {
                     group.list.forEach(nav => {
-                        addRoute(nav, lang, index,pageIndex);
+                        addRoute(nav, lang, index, pageIndex);
                     });
                 });
             } else if (nav.children) {
                 nav.children.forEach(nav => {
-                    addRoute(nav, lang, index,pageIndex);
+                    addRoute(nav, lang, index, pageIndex);
                 });
             } else {
-                addRoute(nav, lang, index,pageIndex);
+                addRoute(nav, lang, index, pageIndex);
             }
         });
     });
-    function addRoute(page, lang, index,pageIndex) {
+    function addRoute(page, lang, index, pageIndex) {
         const component = loadDocs(lang, page.path);
         let child = {
-            path: `/${lang}`+page.path,
+            path: `/${lang}` + page.path,
             meta: {
                 title: page.title || page.name,
                 description: page.description,
@@ -79,7 +78,7 @@ const registerRoute = (navConfig) => {
             name: 'component-' + lang + (page.title || page.name),
             component: component.default || component
         };
-        route[index].children[pageIndex+1].children.push(child);
+        route[index].children[pageIndex + 1].children.push(child);
     }
 
     return route;
@@ -113,12 +112,20 @@ if (userLanguage.indexOf('zh-') !== -1) {
     defaultPath = '/en-US';
 }
 
-route = route.concat([{
-    path: '/',
-    redirect: defaultPath
-}, {
-    path: '*',
-    redirect: defaultPath
-}]);
-console.log(route,'route');
+route = route.concat([
+    {
+        path: '/',
+        redirect: defaultPath
+    }, 
+    {
+        path: '*',
+        redirect: defaultPath
+    },
+    {
+        path:'/demo',
+        name:'demo',
+        component:loadVue('zh-CN','demo')
+    }
+]);
+console.log(route, 'route');
 export default route;
