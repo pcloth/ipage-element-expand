@@ -227,7 +227,8 @@ export default {
         data: $props.formData,
         qData: $props.qData,
         allItems: $props.allItems,
-        $rcell
+        $rcell,
+        h:$rcell?$rcell.$createElement:h
     };
     props = {...this.defaultProp,...props}
     // 递归检查props里面的属性，如果有方法，给方法包装参数

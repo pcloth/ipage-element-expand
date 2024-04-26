@@ -98,6 +98,7 @@ export default {
                 item: this.item,
                 allItems: this.columns,
                 $column:this,
+                h:this.$createElement
             };
         const makeNode = (ff,key)=>{
             console.log(ff,typeof ff,'>>>>');
