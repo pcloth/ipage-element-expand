@@ -28,8 +28,11 @@ export default {
     },
     data(){
         return {
-            canShow:true,
+
         }
+    },
+    watch:{
+
     },
     computed:{
         columnProps(){
@@ -43,7 +46,7 @@ export default {
         }
     },
     async mounted(){
-        await this.checkCanShow()
+        // this.canShow = await this.checkCanShow(this.item)
     },
     methods:{
         // 包装传入格式化
@@ -58,39 +61,31 @@ export default {
             }
             return cellValue;
         },
-        async checkCanShow(){
-            const item = this.item
+        checkCanShow(item){
             const loadData = {
                 item: item,
                 allItems: this.columns,
                 $column:this
             };
-            let show = true;
-            if(typeof item.show==='boolean'){
-                show = item.show
-            }
-            if(item.show){
-                if(item.show.constructor.name === 'Function'){
-                    const nv = item.show(loadData)
-                    if(nv.constructor.name === 'Promise'){
-                        show = await nv
-                    }else{
-                        show = nv
-                    }
-                }else if(item.show.constructor.name === 'Promise'){
-                    show = await item.show(loadData)
-                }else if(item.show.constructor.name === 'Boolean'){
-                    show = item.show
+            let canShow = true;
+            const {show} = item
+            if(show!==undefined){
+                if(typeof show==='boolean'){
+                    canShow = item.show
+                }else if(show.constructor.name === 'Function'){
+                    canShow = item.show(loadData)
+                }else if(show.constructor.name === 'Boolean'){
+                    canShow = item.show
                 }else {
                     throw new Error('show参数必须是方法或者布尔值')
                 }
             }
-            this.canShow = show
-            return show
+            return canShow
         },
     },
     render(){
-        if(!this.canShow){
+        const canShow = this.checkCanShow(this.item)
+        if(!canShow){
             return null
         }
         const scopedSlots = this.item.slots?this.item.slots:{}
@@ -122,9 +117,6 @@ export default {
                 // throw "scopedSlots参数只支持三种类型：cell参数、函数、vNode对象"
             }
         }
-        // Object.keys(scopedSlots).forEach(key=>{
-        //     scopedSlots[key] = makeNode(scopedSlots[key],key)
-        // })
         
         if(this.item.cell){
             scopedSlots.default = (scope)=>{
@@ -133,13 +125,22 @@ export default {
         }else if(this.item.render){
             scopedSlots.default = _toEventsAppendParams_(this.item.render,'render',loadData,this)
         }
-
-        return <TableColumn scopedSlots={scopedSlots} formatter={this.formatter} props={this.columnProps(this.item)}>
+        const columnDoms = []
+        const children = this.item.children||[];
+        children.forEach(item=>{
+            const canShowChild = this.checkCanShow(item)
+            if(canShowChild){
+                columnDoms.push(<ITableColumn item={item} columns={children}></ITableColumn>)
+            }
+        })
+        if(this.item.id===3){
+            // debug
+            window.tt = this
+        }
+        // console.log(columnDoms,'columnDoms')
+        return <TableColumn ref="TableColumn" scopedSlots={scopedSlots} formatter={this.formatter} props={this.columnProps(this.item)}>
             {
-                this.item.children && this.item.children.length>0?
-                this.item.children.map(item=>{
-                    return <ITableColumn item={item} columns={this.columns}></ITableColumn>
-                }):null
+                columnDoms
             }
         </TableColumn>
     }

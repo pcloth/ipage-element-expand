@@ -70,13 +70,41 @@ export default {
                 this.doLayout()
             })
         },
+        checkCanShow(item){
+            const loadData = {
+                item: item,
+                allItems: this.columns,
+                $column:this
+            };
+            let canShow = true;
+            const {show} = item
+            if(show!==undefined){
+                if(typeof show==='boolean'){
+                    canShow = item.show
+                }else if(show.constructor.name === 'Function'){
+                    canShow = item.show(loadData)
+                }else if(show.constructor.name === 'Boolean'){
+                    canShow = item.show
+                }else {
+                    throw new Error('show参数必须是方法或者布尔值')
+                }
+            }
+            return canShow
+        },
     },
     render(){
+        const columnDoms = []
+        const children = this.columns||[];
+        children.forEach(item=>{
+            const canShowChild = this.checkCanShow(item)
+            if(canShowChild){
+                columnDoms.push(<ITableColumn item={item} columns={this.columns}></ITableColumn>)
+            }
+        })
+        // console.log(columnDoms,'columnDoms 父节点')
         return (
             <el-table ref="table" class={this.className} data={this.data} props={{height:this.tableHeight,...this.tableProps}} on={this.tableEvent}>
-                {this.columns.map(item=>{
-                        return <ITableColumn item={item} columns={this.columns}></ITableColumn>
-                    })}
+                {columnDoms}
             </el-table>
         )
     }

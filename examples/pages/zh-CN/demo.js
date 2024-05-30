@@ -3,39 +3,29 @@ export const TableColumns = [
         columnProps:{
             label:'合并表头',
             prop:'test1',
-            // renderHeader:(h)=><span>111</span>
         },
+        show:true,
         children:[
             {
                 id:2,
                 columnProps:{
-                    label:'测试分类1',
-                    prop:'test1',
-                    // renderHeader:(h)=><span>222</span>
+                    label:'测试分类2',
+                    prop:'test2',
                 }
             },
             {
                 id:3,
                 columnProps:{
-                    label:'测试分类2',
-                    prop:'test2',
-                    renderHeader:(h)=><span>测试分类2</span>,
+                    prop:'test3',
+                    renderHeader:(h)=><span>嵌套隐藏3</span>,
                 },
-                show:(loadData)=>{
-                    // console.log(loadData,'loadData,show')
-                    return false
-                },
-                render:(_,{h})=>{
-                    // console.log(_,'>>>>',h)
-                    return <span>8888</span>
-                }
+                show:true,
             },
             {
                 id:6,
                 columnProps:{
                     label:'测试分类6',
-                    prop:'test1',
-                    // renderHeader:(h)=><span>222</span>
+                    prop:'test6',
                 }
             },
         ]
@@ -43,9 +33,17 @@ export const TableColumns = [
     {
         id:4,
         columnProps:{
-            label:'测试分类3',
-            prop:'test3',
+            label:'不嵌套隐藏',
+            prop:'test4',
         },
         show:true
-    }
+    },
+    // {
+    //     id:5,
+    //     columnProps:{
+    //         label:'不嵌套',
+    //         prop:'test5',
+    //     },
+    //     show:true
+    // }
 ]
