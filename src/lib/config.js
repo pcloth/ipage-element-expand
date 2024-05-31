@@ -72,6 +72,7 @@ export const config = {
                 minWidth: 140,
                 fixed: 'right',
             },
+            isOperate: true,
         },
         /** 默认的el-pagination 组件的参数，直接传递给el-pagination */
         paginationProps:{

@@ -38,15 +38,29 @@ export default {
         className:{
             type:String,
             default:()=>$c.get('class').ITableRoot
+        },
+        /** 可显示的字段 */
+        showColumnKeys:{
+            type:Array,
+            default:()=>[]
         }
     },
     data(){
         return {
             // height:'400px'
+            showTable:true
         }
     },
     mounted(){
 
+    },
+    watch:{
+        columns:{
+            handler(){
+                this.reDarw()
+            },
+            deep:true
+        },
     },
     computed:{
         tableEvent(){
@@ -63,6 +77,13 @@ export default {
             if (this.$refs.table && this.$refs.table.doLayout) {
                 this.$refs.table.doLayout();
             }
+        },
+        /** 重绘表格，如果要控制嵌套列的隐藏，需要手动重绘 */
+        reDarw(){
+            this.showTable = false;
+            setTimeout(()=>{
+                this.showTable = true;
+            },0)
         },
         reSize(){
             // this.height = `${this.tableHeight}px`
@@ -93,15 +114,18 @@ export default {
         },
     },
     render(){
+        if(!this.showTable) return null;
         const columnDoms = []
         const children = this.columns||[];
         children.forEach(item=>{
-            const canShowChild = this.checkCanShow(item)
+            const prop = item.columnProps.prop;
+            const isOperate = item.isOperate;
+            const canShowChild = isOperate||this.showColumnKeys.includes(prop)
+            // const canShowChild = isOperate||this.checkCanShow(item)
             if(canShowChild){
-                columnDoms.push(<ITableColumn item={item} columns={this.columns}></ITableColumn>)
+                columnDoms.push(<ITableColumn item={item} columns={this.columns} showColumnKeys={this.showColumnKeys}></ITableColumn>)
             }
         })
-        // console.log(columnDoms,'columnDoms 父节点')
         return (
             <el-table ref="table" class={this.className} data={this.data} props={{height:this.tableHeight,...this.tableProps}} on={this.tableEvent}>
                 {columnDoms}

@@ -31,7 +31,7 @@
         <div ref="tablewrap" class="tableWrap" :class="tableWrap">
             <slot name="table">
                 <ITable v-loading="dataLoading" :tableProps="tableProps" :tableHeight="tableHeight" :tableSlots="tableSlots" :tableOn="tableOn" ref="table" :data="dataList"
-                        :columns="mergeColumns"></ITable>
+                        :columns="mergeColumns" :showColumnKeys="showColumnKeys"></ITable>
             </slot>
             <slot name="pagination">
                 <el-pagination class="pagination" :class="paginationClass" :total="total" :current-page="filterQData.pageNo" :page-size="filterQData.pageSize"
@@ -63,6 +63,7 @@ import ITable from './ITable';
 import IForm from './IForm';
 import ISearch from './ISearch';
 import RenderCell from './components/RenderCell';
+import ITableColFilter from './components/ITableColFilter';
 import SplitDownloadAndExport from './components/SplitDownloadAndExport';
 
 export default {
@@ -73,6 +74,7 @@ export default {
         ITable,
         IForm,
         SplitDownloadAndExport,
+        // ITableColFilter
     },
     props: {
         /**
@@ -303,7 +305,8 @@ export default {
                         },
                     }
                 }
-            ]
+            ],
+            showColumnKeys:[]
         };
     },
     watch: {
@@ -319,6 +322,12 @@ export default {
                 this.filter = this.searchValue;
             },
             deep: true,
+        },
+        columns:{
+            handler(){
+                this._calculateDisplayableFields(this.columns)
+            },
+            deep:true
         },
     },
     computed: {
@@ -340,19 +349,30 @@ export default {
             return operations;
         },
         mergeColumns() {
-            this.columns;
-            const mergeColumns = [...this.columns];
+            const mergeColumns = this._getColumns(this.columns)
             // 默认数据操作区域
             if(this.showColumnButton){
                 const props_ = deepAssign($c.get('columnButtonProps'), this.columnButtonProps);
                 mergeColumns.push({
                     ...props_,
                     // todo 制作筛选功能
-                    // slots:{
-                    //     header:<div class="IPage_toolBar">
-                    //         <span>{props_.columnProps.label}</span>
-                    //     </div>
-                    // },
+                    /** */ 
+                    slots:{
+                        header:(data,loadData)=>{
+                            // todo 这里制作筛选功能
+                            return <div class="IPage_toolBar">
+                            <span>{props_.columnProps.label}</span>
+                            <ITableColFilter 
+                            value={this.showColumnKeys}
+                            onChangeFilter={(val)=>{
+                                // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+                                this.showColumnKeys = val
+                            }} 
+                            allItems={loadData.allItems} 
+                            loadData={loadData}></ITableColFilter>
+                        </div>
+                        }
+                    },
                     render: ({ row }) => {
                         const buttons = [];
                         if (this.editButton && typeof this.editButton) {
@@ -404,6 +424,32 @@ export default {
         }
     },
     methods: {
+        _calculateDisplayableFields(columns){
+            const showColumnKeys = []
+            columns.forEach(item=>{
+                const prop = item.columnProps.prop;
+                showColumnKeys.push(prop)
+                if(item.children){
+                    const children = this._calculateDisplayableFields(item.children)
+                    showColumnKeys.push(...children)
+                }
+            })
+            return showColumnKeys
+        },
+        _getColumns(columns){
+            const _columns = []
+            columns.forEach(item=>{
+                const prop = item.columnProps.prop;
+                if(item.children){
+                    item.children = this._getColumns(item.children)
+                }
+                _columns.push({
+                    ...item,
+                    show:this.showColumnKeys.includes(prop)
+                })
+            })
+            return _columns
+        },
         _vColumnRenderCell_(allItems, row) {
             return allItems.map((item) => {
                 return (
@@ -566,7 +612,8 @@ export default {
             this.tableHeightEventSwitch(1);
         }else if(tableHeightMode==='data'){
             this.tableHeight = 0
-        }        
+        }
+        this.showColumnKeys =  this._calculateDisplayableFields(this.columns)        
     },
 };
 </script>
@@ -610,6 +657,6 @@ export default {
 .IPage_toolBar {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 </style>

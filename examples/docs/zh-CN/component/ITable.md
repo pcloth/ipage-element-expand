@@ -112,9 +112,14 @@
 |属性|类型|说明|默认值|
 |--|--|--|--|
 |columnProps|object|传递给el-table-column的参数，具体参数查阅element-ui的文档|无|
-|show|boolean,function,Promise,async function|是否显示当前列、支持方法和异步方法|无|
+|show|boolean,|是否显示当前列|true|
 |render|jsx function|直接渲染dom，类似slots.default|无|
 |slots|object|插槽内容|{}|
 |children|array|多级表头的子表头配置|无|
+
+## ref上的方法
+|方法|说明|
+|--|--|
+|reDraw|手动重绘|
 
 

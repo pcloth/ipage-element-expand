@@ -5,6 +5,7 @@ import {
     isVNode,
     isRenderCell,
     _toEventsAppendParams_,
+    toEventsAppendParamsDeep
 } from "../utils";
 const defaultColumnProps = {
     showOverflowTooltip:true
@@ -25,6 +26,10 @@ export default {
             type:Array,
             default:()=>[]
         },
+        showColumnKeys:{
+            type:Array,
+            default:()=>[]
+        }
     },
     data(){
         return {
@@ -44,9 +49,6 @@ export default {
                 return props
             }
         }
-    },
-    async mounted(){
-        // this.canShow = await this.checkCanShow(this.item)
     },
     methods:{
         // 包装传入格式化
@@ -88,13 +90,15 @@ export default {
         if(!canShow){
             return null
         }
-        const scopedSlots = this.item.slots?this.item.slots:{}
+        
         const loadData = {
                 item: this.item,
                 allItems: this.columns,
                 $column:this,
                 h:this.$createElement
             };
+        const slots = this.item.slots?this.item.slots:{}
+        const scopedSlots = toEventsAppendParamsDeep(slots,loadData,this)
         const makeNode = (ff,key)=>{
             console.log(ff,typeof ff,'>>>>');
             if(typeof ff==='function'){
@@ -128,20 +132,15 @@ export default {
         const columnDoms = []
         const children = this.item.children||[];
         children.forEach(item=>{
-            const canShowChild = this.checkCanShow(item)
+            const prop = item.columnProps.prop;
+            // const canShowChild = this.checkCanShow(item)
+            const canShowChild = this.showColumnKeys.includes(prop)
             if(canShowChild){
-                columnDoms.push(<ITableColumn item={item} columns={children}></ITableColumn>)
+                columnDoms.push(<ITableColumn item={item}></ITableColumn>)
             }
         })
-        if(this.item.id===3){
-            // debug
-            window.tt = this
-        }
-        // console.log(columnDoms,'columnDoms')
         return <TableColumn ref="TableColumn" scopedSlots={scopedSlots} formatter={this.formatter} props={this.columnProps(this.item)}>
-            {
-                columnDoms
-            }
+            {columnDoms}
         </TableColumn>
     }
 }

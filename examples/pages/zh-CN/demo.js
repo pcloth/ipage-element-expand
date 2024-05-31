@@ -19,7 +19,11 @@ export const TableColumns = [
                     prop:'test3',
                     renderHeader:(h)=><span>嵌套隐藏3</span>,
                 },
-                show:true,
+                show:(loadData)=>{
+                    console.log(loadData,'canshow')
+                    // return this.showColFlag
+                    return true
+                },
             },
             {
                 id:6,
