@@ -43,6 +43,36 @@ export default {
                 },
             ],
             ipageProps:{
+                searchItems:[
+                    {
+                        id:'test',
+                        slot:'select-more',
+                        props:{
+                            service:async (params)=>{
+                                return new Promise((resolve)=>{
+                                    console.log(params, "params");
+                                    const data = []
+                                    for(let i=0;i<this.count*10;i++){
+                                        data.push({
+                                            label: "label-"+i,
+                                            value: "value-"+i,
+                                        })
+                                    }
+
+                                    setTimeout(()=>{
+                                        resolve({
+                                            data:{
+                                                records:data,
+                                                total:this.count*10
+                                            },
+                                        })
+                                    },5000)
+                                    
+                                })
+                            },
+                        }
+                    }
+                ],
                 searchProps:{
                     queryFunc:async (params)=>{
                         console.log(params, "params");
