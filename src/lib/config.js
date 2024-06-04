@@ -76,7 +76,8 @@ export const config = {
         },
         /** 默认的el-pagination 组件的参数，直接传递给el-pagination */
         paginationProps:{
-            layout:"total, sizes, prev, pager, next, jumper"
+            layout:"total, sizes, prev, pager, next, jumper",
+            pageSizes:[10, 20, 50, 100]
         },
         /** 默认toolbar上的RenderCell组件数据 */
         toolbarButton:{

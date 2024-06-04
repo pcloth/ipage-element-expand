@@ -35,7 +35,7 @@
             </slot>
             <slot name="pagination">
                 <el-pagination class="pagination" :class="paginationClass" :total="total" :current-page="filterQData.pageNo" :page-size="filterQData.pageSize"
-                               @current-change="pageChange" @size-change="handleSizeChange" :page-sizes="[10, 20, 50, 100]"
+                               @current-change="pageChange" @size-change="handleSizeChange"
                             v-bind="mergePaginationProps"></el-pagination>
             </slot>
         </div>
@@ -125,6 +125,11 @@ export default {
             default: () => ([]),
         },
         showColumnButton: {
+            type: Boolean,
+            default: true,
+        },
+        /** 是否显示字段隐藏控制器 */
+        showColumnFilter: {
             type: Boolean,
             default: true,
         },
@@ -219,16 +224,16 @@ export default {
         // 新增表单打开前接口
         befoceAddOpenFunc: {
             type: Function,
-            default: () => {
-                return Promise.resolve({});
-            },
+            // default: (loadData) => {
+            //     return Promise.resolve({...loadData.data});
+            // },
         },
         // 编辑表单打开前接口
         befoceEditOpenFunc: {
             type: Function,
-            default: (loadData) => {
-                return Promise.resolve({...loadData.data});
-            },
+            // default: (loadData) => {
+            //     return Promise.resolve({...loadData.data});
+            // },
         },
         deleteButton: {
             type: [Object, Boolean],
@@ -260,7 +265,7 @@ export default {
             formData: {},
             formLoading: false,
             showDialog: false,
-            currentRow: null,
+            currentRow: {},
             dialogType: '',
             dialogTitle: '',
             dialogProps_: {},
@@ -355,21 +360,21 @@ export default {
                 const props_ = deepAssign($c.get('columnButtonProps'), this.columnButtonProps);
                 mergeColumns.push({
                     ...props_,
-                    // todo 制作筛选功能
-                    /** */ 
                     slots:{
+                        /** 筛选可见字段功能 */
                         header:(data,loadData)=>{
-                            // todo 这里制作筛选功能
-                            return <div class="IPage_toolBar">
+                            let className = 'IPage_toolBar'
+                            return <div class={className}>
                             <span>{props_.columnProps.label}</span>
-                            <ITableColFilter 
-                            value={this.showColumnKeys}
-                            onChangeFilter={(val)=>{
-                                // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-                                this.showColumnKeys = val
-                            }} 
-                            allItems={loadData.allItems} 
-                            loadData={loadData}></ITableColFilter>
+                            {this.showColumnFilter?<ITableColFilter 
+                                value={this.showColumnKeys}
+                                onChangeFilter={(val)=>{
+                                    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+                                    this.showColumnKeys = val
+                                }} 
+                                allItems={loadData.allItems} 
+                                loadData={loadData}/>:null}
+                            
                         </div>
                         }
                     },
@@ -490,7 +495,7 @@ export default {
                     this.formLoading = false;
                 }
             } else {
-                this.currentRow = loadData.data;
+                this.currentRow = {...loadData.data};
                 this.showDialog = true;
             }
             this.$nextTick(() => {
@@ -657,6 +662,6 @@ export default {
 .IPage_toolBar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between;  
 }
 </style>

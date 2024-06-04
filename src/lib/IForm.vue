@@ -155,7 +155,7 @@ export default {
     watch:{
         value:{
             handler(){
-                // console.log('watch',JSON.stringify(this.value))
+                // console.log('watch form',JSON.stringify(this.value))
                 this.form = this.value
                 this.clearValidate()
             },
@@ -163,7 +163,6 @@ export default {
         },
         form(val){
             this.$emit('input',val)
-            // console.log('watch from',JSON.stringify(val))
         }
     },
     computed:{
@@ -218,6 +217,7 @@ export default {
         }else{
             this.handleSubmit = this._handleSubmit
         }
+        window.tt = this;
     },
     methods:{
         initOptions(){
