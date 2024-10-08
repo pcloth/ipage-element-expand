@@ -89,6 +89,7 @@
 |useExternalData|Boolean|是否使用传入数据，而不是接口获取|false|
 |excelData|Array|传入的数据，搭配`useExternalData`使用|[]|
 |queryApi|Function|查询接口方法|无|
+|queryInterval|Number|查询接口间隔毫秒数|1000|
 |processQueryDataFunc|查询后可以用它来处理数据|无|
 |specifyTotal|Number|手动指定total，如果有些接口是无法给total的，可以手动指定导出总数，设置>=0生效|-1|
 |queryParams|Object|发送给queryApi的额外参数|{}|

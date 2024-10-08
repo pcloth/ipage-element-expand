@@ -87,6 +87,11 @@ export default {
                 return () => {};
             },
         },
+        // 查询间隔
+        queryInterval: {
+            type: Number,
+            default: 1000,
+        },
         processQueryDataFunc: {
             type: [Function, undefined],
         },
@@ -280,6 +285,14 @@ export default {
             });
             return sheetData;
         },
+        async waitQuery(){
+            // console.log('wait',this.queryInterval)
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, this.queryInterval);
+            });
+        },
         // 分页面处理数据，生成不同的excel文件，然后打包成zip
         async handleExportFileSplit() {
             if (this.beforeAction) {
@@ -310,6 +323,7 @@ export default {
             } else {
                 // 从接口获取数据
                 for (let i = 1; i <= apiPageCount; i++) {
+                    await this.waitQuery();
                     let sheetData;
                     try {
                         const resp = await this.getThisPageData(i);
