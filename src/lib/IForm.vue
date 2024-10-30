@@ -10,7 +10,7 @@
                 <RenderCell v-if="canShowSubmitButton" :item="mergeSubmitButton" :qData="qData"/>
                 <RenderCell v-if="canShowCancelButton" :item="mergeCancelButton" :qData="qData"/>
                 <template v-for="btn in expandButtons">
-                    <RenderCell v-model="form[v.id]" :item="btn" :key="btn.id" :formData="form" :qData="qData" :allItems="expandButtons"
+                    <RenderCell v-model="form[btn.id]" :item="btn" :key="btn.id" :formData="form" :qData="qData" :allItems="expandButtons"
                                 defaultSlot="button"></RenderCell>
                 </template>
             </el-col>
@@ -249,11 +249,12 @@ export default {
                         this.submitLoading = true;
                         this.submitFunc(this.form)
                             .then(res => {
-                                this.submitLoading = false;
                                 this.$emit("afterSubmit", res);
                             })
                             .finally(() => {
-                                this.submitLoading = false;
+                                setTimeout(() => {
+                                    this.submitLoading = false;
+                                }, 500);
                             });
                     }
                 } else {
