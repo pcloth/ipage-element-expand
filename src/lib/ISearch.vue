@@ -370,7 +370,7 @@ export default {
                 })
                 
             }
-            
+            await this.$nextTick()
             return new Promise((resolve) => {
                 const fromData = this.mergeQData(qdata);
                 this.$emit("beforeSearch", fromData);

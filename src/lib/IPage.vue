@@ -508,6 +508,7 @@ export default {
         },
         handleSizeChange(pageSize) {
             this.filterQData.pageSize = pageSize;
+            this.filterQData.pageNo = 1;
             this.handleSearch();
         },
         handleSearch(params) {
