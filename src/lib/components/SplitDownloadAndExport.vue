@@ -10,7 +10,8 @@
 </template>
 
 <script>
-const ExportJsonExcel = require('js-export-excel');
+// const ExportJsonExcel = require('jsExportExcel');
+import ExportJsonExcel from './jsExportExcel.js';
 const JSZip = require('jszip');
 import { delObjectEmpty } from '../utils'
 import {config as $c} from '../config'
@@ -29,6 +30,15 @@ const getButtonProps = () => {
 export default {
     name:'SplitDownloadAndExport',
     props: {
+        /**
+         * 导出excel的配置项，会传递给xlsx库
+         */
+        xlsxProps:{
+            type: Object,
+            default() {
+                return {};
+            },
+        },
         /**
          * Array<Object<key:value>>>
          * columns = [<key:value>]
@@ -264,6 +274,7 @@ export default {
             option.sheetFilter = sheetFilter;
             option.sheetHeader = sheetHeader;
             option.columnWidths = columnWidths;
+            option.xlsxProps = this.xlsxProps;
             return option;
         },
         // 处理数据深度和formatter
@@ -339,12 +350,14 @@ export default {
             }
 
             this.allData = allData;
-            this.beforeCreateExcel &&
-                this.beforeCreateExcel(allData, {
-                    sheetFilter,
-                    sheetHeader,
-                    columnWidths,
-                });
+            if(this.beforeCreateExcel){
+                // 如果beforeCreateExcel是异步的，就await一下
+                if(this.beforeCreateExcel.constructor.name === 'AsyncFunction'){
+                    await this.beforeCreateExcel(allData, option);
+                }else{
+                    this.beforeCreateExcel(allData, option);
+                }
+            }
             if (splitFile) {
                 // 如果需要切分文件，就生成多个excel文件
                 const pageCount = Math.ceil(
