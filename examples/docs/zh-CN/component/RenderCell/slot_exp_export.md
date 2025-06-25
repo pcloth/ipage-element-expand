@@ -114,7 +114,7 @@
 |xlsxProps|Object|传递给底层xlsx库的参数，用来实现合并单元格等高级功能|无|
 |beforeAction|Function|执行导出功能前的方法，会等待这个方法完成|无|
 |beforeCreateExcel|Function、AsyncFunction|创建excel前的方法，会把整体的数据放出来，你也可以再这里修改options的内容，支持异步，你可以接到参数(data,options)，然后返回{data,options}，也可以不返回直接修改原生对象|无|
-|customizeCreateExcel|Function|自定义导出功能，当需要特别复杂的表的时候，可以从这里拿到全部数据和参数，直接调用xlsx库完全自定义导出|无|
+|customizeCreateExcel|Function|你可以接到参数(data,options,callback)自定义导出功能，当需要特别复杂的表的时候，可以从这里拿到全部数据和参数，直接调用xlsx库完全自定义导出，导出完成后记得调一下callback|无|
 |delParamsEmpty|Boolean|是否删除查询空参数|true|
 
 

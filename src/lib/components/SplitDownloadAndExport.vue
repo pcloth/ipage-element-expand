@@ -353,7 +353,9 @@ export default {
                 }
             }
             if(this.customizeCreateExcel){
-                return this.customizeCreateExcel(allData, option);
+                return this.customizeCreateExcel(allData, option, ()=>{
+                    this.handleExportSuccess();
+                });
             }
 
             
