@@ -172,6 +172,10 @@ export default {
             type: Function,
             default: () => {},
         },
+        customizeCreateExcel: {
+            type: Function,
+            default: null, // 如果需要自定义导出excel的逻辑，可以传入一个函数
+        },
         // 是否要删除queryParams查询为空的字段
         delParamsEmpty: {
             type: Boolean,
@@ -309,7 +313,7 @@ export default {
             if (this.beforeAction) {
                 await this.beforeAction();
             }
-            const option = this.getOptions();
+            let option = this.getOptions();
             const { sheetFilter, sheetHeader, columnWidths, fileName } = option;
             this.loading = true;
             try {
@@ -348,16 +352,27 @@ export default {
                     this.currentPage = i;
                 }
             }
+            if(this.customizeCreateExcel){
+                return this.customizeCreateExcel(allData, option);
+            }
 
-            this.allData = allData;
+            
             if(this.beforeCreateExcel){
                 // 如果beforeCreateExcel是异步的，就await一下
+                let resp;
                 if(this.beforeCreateExcel.constructor.name === 'AsyncFunction'){
-                    await this.beforeCreateExcel(allData, option);
+                    resp = await this.beforeCreateExcel(allData, option);
                 }else{
-                    this.beforeCreateExcel(allData, option);
+                    resp = this.beforeCreateExcel(allData, option);
+                }
+                if(resp && resp.data){
+                    allData = resp.data;
+                }
+                if(resp && resp.options){
+                    option = resp.options;
                 }
             }
+            this.allData = allData;
             if (splitFile) {
                 // 如果需要切分文件，就生成多个excel文件
                 const pageCount = Math.ceil(
