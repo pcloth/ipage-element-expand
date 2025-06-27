@@ -23,6 +23,17 @@
                     slot:'export',
                     isFormItem:false,
                     props:{
+                        beforeCreateExcel:(allData)=>{
+                            console.log('beforeCreateExcel out')
+                            return new Promise((resolve,reject)=>{
+                                setTimeout(()=>{
+                                    resolve({
+                                        data:allData
+                                    })
+                                },3000)
+                                
+                            })
+                        },
                         splitCount:30,
                         queryApi: this.fetchDataList,
                         // 合并单元格，例如合并第一行的前两列

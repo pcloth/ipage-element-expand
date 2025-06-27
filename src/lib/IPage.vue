@@ -162,7 +162,7 @@ export default {
         },
         tableWrap:{
             type:String,
-            default:$c.get('class').tableWrap
+            default:()=>$c.get('class').tableWrap
         },
         tableFixHeight:{
             type:Number,
@@ -198,11 +198,11 @@ export default {
         },
         operationClass:{
             type:String,
-            default:$c.get('class').IPageOperation
+            default:()=>$c.get('class').IPageOperation
         },
         paginationClass:{
             type:String,
-            default:$c.get('class').IPagePagination
+            default:()=>$c.get('class').IPagePagination
         },
         // 行编辑按钮
         editButton: {

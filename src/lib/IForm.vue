@@ -35,20 +35,22 @@ export default {
         formClass: {
             type: String,
             default(){
-                return $c.get('class').IFormRoot||$c.get('formClass')
+                return ()=>{
+                    return $c.get('class').IFormRoot||$c.get('formClass')
+                }
             }
         },
         /** 表单配置 */
         formProps: {
             type: Object,
             default() {
-                return $c.get('formProps');
+                return ()=>$c.get('formProps');
             }
         },
         formOn: {
             type: Object,
             default() {
-                return $c.get('formOn');
+                return ()=>$c.get('formOn');
             }
         },
         /** 表单校验规格配置 */
@@ -62,7 +64,7 @@ export default {
         expandButtons: {
             type: Array,
             default() {
-                return $c.get('expandButtons');
+                return ()=>$c.get('expandButtons');
             }
         },
         /** 默认的表单配置 */
@@ -78,15 +80,15 @@ export default {
         /** 是否显示表单按钮 */
         showSubmitButton: {
             type: Boolean,
-            default: $c.get('showSubmitButton')
+            default: ()=>$c.get('showSubmitButton')
         },
         submitTitle: {
             type: String,
-            default: $c.get('submitTitle')
+            default: ()=>$c.get('submitTitle')
         },
         cancelTitle: {
             type: String,
-            default: $c.get('cancelTitle')
+            default: ()=>$c.get('cancelTitle')
         },
         /** 表单按钮的配置 */
         submitButtonProps: {
@@ -98,7 +100,7 @@ export default {
         /** 是否显示重置按钮 */
         showCancelButton: {
             type: Boolean,
-            default: $c.get('showCancelButton')
+            default: ()=>$c.get('showCancelButton')
         },
         /** 重置按钮的配置 */
         cancelButtonProps: {
@@ -134,7 +136,7 @@ export default {
         },
         submitPreventRepeat:{
             type:Boolean,
-            default:$c.get('submitPreventRepeat')
+            default:()=>$c.get('submitPreventRepeat')
         },
         loading:{
             type:Boolean,

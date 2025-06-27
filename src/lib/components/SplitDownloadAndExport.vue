@@ -119,32 +119,32 @@ export default {
         },
         pageMode: {
             type: String,
-            default: $c.get('search.mode'), // page 直接页码分页，offset 偏移量分页
+            default: ()=>$c.get('search.mode'), // page 直接页码分页，offset 偏移量分页
         },
         pageSizeKey: {
             type: String,
-            default: $c.get('search.pageSize'),
+            default: ()=>$c.get('search.pageSize'),
         },
         pageNumberKey: {
             type: String,
-            default: $c.get('search.pageNo'),
+            default: ()=>$c.get('search.pageNo'),
         },
         offsetKey: {
             type: String,
-            default: $c.get('search.offset'),
+            default: ()=>$c.get('search.offset'),
         },
         limitKey: {
             type: String,
-            default: $c.get('search.limit'),
+            default: ()=>$c.get('search.limit'),
         },
         dataPath: {
             type: String,
-            default: $c.get('response.data'),
+            default: ()=>$c.get('response.data'),
         },
         // 总条数key和路径，支持.分割
         totalPath: {
             type: String,
-            default: $c.get('response.total'),
+            default: ()=>$c.get('response.total'),
         },
         // 每多少条数据分割一次请求
         splitCount: {
@@ -170,7 +170,7 @@ export default {
         },
         beforeCreateExcel: {
             type: Function,
-            default: () => {},
+            default: null,
         },
         customizeCreateExcel: {
             type: Function,
@@ -362,8 +362,11 @@ export default {
             if(this.beforeCreateExcel){
                 // 如果beforeCreateExcel是异步的，就await一下
                 let resp;
-                if(this.beforeCreateExcel.constructor.name === 'AsyncFunction'){
+                console.log('beforeCreateExcel',this.beforeCreateExcel.constructor.name)
+                if(['AsyncFunction','Promise'].includes(this.beforeCreateExcel.constructor.name)){
+                    console.log('beforeCreateExcel is async function')
                     resp = await this.beforeCreateExcel(allData, option);
+                    console.log('beforeCreateExcel resp',resp)
                 }else{
                     resp = this.beforeCreateExcel(allData, option);
                 }

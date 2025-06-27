@@ -158,7 +158,7 @@ export default {
         /** 是否显示搜索按钮 */
         showSearchButton: {
             type: Boolean,
-            default: $c.get('showSearchButton')
+            default: ()=>$c.get('showSearchButton')
         },
 
         /** 搜索按钮的配置 */
@@ -171,7 +171,7 @@ export default {
         /** 是否显示重置按钮 */
         showResetButton: {
             type: Boolean,
-            default: $c.get('showResetButton')
+            default: ()=>$c.get('showResetButton')
         },
         /** 重置按钮的配置 */
         resetButtonProps: {
@@ -217,11 +217,11 @@ export default {
         /** 强制所有搜索项目进more 比如在有些手机尺寸上可以用这个控制 */
         allinMore:{
             type:Boolean,
-            default:$c.get('allinMore')
+            default:()=>$c.get('allinMore')
         },
         className:{
             type:String,
-            default:$c.get('class').ISearchRoot
+            default:()=>$c.get('class').ISearchRoot
         }
     },
     computed:{
