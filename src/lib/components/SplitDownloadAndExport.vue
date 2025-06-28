@@ -361,20 +361,17 @@ export default {
             
             if(this.beforeCreateExcel){
                 // 如果beforeCreateExcel是异步的，就await一下
-                let resp;
-                console.log('beforeCreateExcel',this.beforeCreateExcel.constructor.name)
-                if(['AsyncFunction','Promise'].includes(this.beforeCreateExcel.constructor.name)){
-                    console.log('beforeCreateExcel is async function')
-                    resp = await this.beforeCreateExcel(allData, option);
-                    console.log('beforeCreateExcel resp',resp)
-                }else{
-                    resp = this.beforeCreateExcel(allData, option);
-                }
-                if(resp && resp.data){
-                    allData = resp.data;
-                }
-                if(resp && resp.options){
-                    option = resp.options;
+                try {
+                    const resp = await this.beforeCreateExcel(allData, option);
+                    if(resp && resp.data){
+                        allData = resp.data;
+                    }
+                    if(resp && resp.options){
+                        option = resp.options;
+                    }
+                } catch (error) {
+                    this.handleExportError(error);
+                    return;
                 }
             }
             this.allData = allData;
