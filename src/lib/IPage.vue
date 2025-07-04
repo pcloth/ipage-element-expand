@@ -248,7 +248,7 @@ export default {
         },
         className:{
             type:String,
-            default:$c.get('class').IPageRoot
+            default: () => $c.get('class').IPageRoot
         }
     },
     data() {

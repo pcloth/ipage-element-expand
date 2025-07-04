@@ -49,6 +49,7 @@
                         id:'gender',
                         slot:'select',
                         label:'性别',
+                        isFormItem:true,
                         props:{
                             clearable:true
                         },

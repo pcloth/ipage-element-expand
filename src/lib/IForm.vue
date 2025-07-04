@@ -1,7 +1,7 @@
 <template>
     <el-form ref="formRef" :model="form" :class="formClass" v-bind="formProps || {}" v-on="formOn || {}" :rules="formRules"
              v-loading="loading">
-        <el-row>
+        <el-row :gutter="gutter">
             <el-col :span="v.span ? v.span : 12" v-for="v in formItems" :key="v.id">
                 <RenderCell v-model="form[v.id]" :input="(nv)=>$set(form,v.id,nv)" :key="v.id" :item="v" :allItems="formItems" :formData="form" :qData="qData" defaultSlot="input">
                 </RenderCell>
@@ -20,7 +20,7 @@
 
 <script lang="jsx">
 import RenderCell from "./components/RenderCell";
-import {preventRepeat,deepAssign} from "./utils"
+import {preventRepeat,deepAssign } from "./utils"
 import {config as $c} from './config';
 export default {
     name: "IForm",
@@ -34,24 +34,20 @@ export default {
         },
         formClass: {
             type: String,
-            default(){
-                return ()=>{
-                    return $c.get('class').IFormRoot||$c.get('formClass')
-                }
-            }
+            default: () => $c.get('class').IFormRoot || $c.get('formClass')
+        },
+        gutter: {
+            type: Number,
+            default: () => $c.get('gutter')
         },
         /** 表单配置 */
         formProps: {
             type: Object,
-            default() {
-                return ()=>$c.get('formProps');
-            }
+            default: () => $c.get('formProps')
         },
         formOn: {
             type: Object,
-            default() {
-                return ()=>$c.get('formOn');
-            }
+            default: () => $c.get('formOn')
         },
         /** 表单校验规格配置 */
         formRules: {
@@ -63,9 +59,7 @@ export default {
         /** 扩展按钮列表 */
         expandButtons: {
             type: Array,
-            default() {
-                return ()=>$c.get('expandButtons');
-            }
+            default: () => $c.get('expandButtons')
         },
         /** 默认的表单配置 */
         formOption: {
