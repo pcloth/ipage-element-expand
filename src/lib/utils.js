@@ -120,7 +120,6 @@ export const toEventsAppendParamsDeep = (obj, row, that) => {
     if(typeof obj==='string'){
         return obj;
     }else if(obj instanceof Function){
-        console.log('toEventsAppendParamsDeep',obj.constructor.name, 'is function')
         return _toEventsAppendParams_(obj, '', row, that)
     }else if(obj instanceof Date){
         return obj;
@@ -131,7 +130,6 @@ export const toEventsAppendParamsDeep = (obj, row, that) => {
         if (Object.hasOwnProperty.call(obj, key)) {
             const value = obj[key];
             if (typeof value === "function") {
-                console.log('toEventsAppendParamsDeep',value.constructor.name, 'is function')
                 result[key] = _toEventsAppendParams_(value, key, row, that)
             }else if(Array.isArray(value)){
                 if(value.length>0){
@@ -154,7 +152,6 @@ export const toEventsAppendParamsDeep = (obj, row, that) => {
 /** 给一个方法包装参数 */
 export const _toEventsAppendParams_ = (func, key, row, that) => {
     if (!func) { return func }
-    console.log(func.constructor.name,'<<<< _toEventsAppendParams_',key, func)
     return (...args) => {
         if (['change'].includes(key) && that) {
             // 把特定事件抛给父组件
