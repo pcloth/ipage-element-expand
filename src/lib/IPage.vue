@@ -1,7 +1,7 @@
 <template>
     <div class="pageTemplate" :class="className">
         <slot name="search">
-            <ISearch ref="isearch" @resetFields="$emit('resetFields')" v-model="filter" v-bind="searchProps" :qData="realPageParams" @searchSuccess="searchSuccess"
+            <ISearch ref="isearch" @resetFields="resetFields" v-model="filter" v-bind="searchProps" :qData="realPageParams" @searchSuccess="searchSuccess"
                      :search-items="searchItems" @beforeSearch="beforeSearch" @searchFail="searchFail" @searchFinally="searchFinally">
             </ISearch>
         </slot>
@@ -516,6 +516,9 @@ export default {
         },
         _handleSearchNow(params) {
             return this.$refs.isearch._handleSearchNow(params);
+        },
+        resetFields(form) {
+            this.$emit('resetFields', form);
         },
         searchSuccess(res) {
             const keyPaths = $c.get('response');

@@ -6,6 +6,8 @@
 ```html
 <template>
     <IPage 
+        :searchValue.sync="searchValue"
+        @resetFields="resetFields"
         v-bind="ipageProps" 
     />
 </template>
@@ -13,6 +15,9 @@
     export default {
         data(){
             return {
+                searchValue:{
+                    ck:'1'
+                },
                 ipageProps:{
                     searchProps:{
                         queryFunc:this.queryFunc
@@ -23,6 +28,15 @@
                             label:'姓名',
                             props:{
                                 placeholder:"请输入姓名"
+                            },
+                        },
+                        {
+                            id:'ck',
+                            label:'测试',
+                            slot: 'checkbox',
+                            props: {
+                                trueLabel: '1',
+                                falseLabel: '0',
                             },
                         },
                         {
@@ -117,6 +131,9 @@
             }
         },
         methods:{
+            resetFields(form){
+                console.log('resetFields',form===this.searchValue,form,this.searchValue)
+            },
             async queryFunc(params){
                 return new Promise((resolve, reject) => {
                     const records = []

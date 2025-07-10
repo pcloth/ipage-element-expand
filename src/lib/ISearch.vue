@@ -297,7 +297,7 @@ export default {
     },
     data(){
         return {
-            form:{...(this.value||{})},
+            form:this.value,
             loading:false,
             initSearch:false,
             openHighSearch:false,
