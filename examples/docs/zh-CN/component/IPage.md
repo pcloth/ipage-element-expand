@@ -27,6 +27,18 @@
                             console.log('selection2',selection,ld)
                         },
                     },
+                    beforeAddOpenFunc:(loadData)=>{
+                        console.log('beforeAddOpenFunc',loadData)
+                        return {
+                            name:'test'
+                        }
+                    },
+                    befoceEditOpenFunc:(loadData)=>{
+                        console.log('befoceEditOpenFunc',loadData)
+                        return {
+                            ...loadData.data
+                        }
+                    },
                     searchProps:{
                         queryFunc:this.queryFunc
                     },
@@ -201,8 +213,8 @@
 | editButton | `CellItemType\|Boolean` | `() => ({})` | 编辑按钮配置 |
 | formItems | `Array<CellItemType>` | `() => []` | 表单字段配置数组 |
 | formRules | `Object` | `() => ({})` | 表单校验规则 |
-| befoceAddOpenFunc | `Function` | - | 新增弹窗打开前回调函数 |
-| befoceEditOpenFunc | `Function` | - | 编辑弹窗打开前回调函数 |
+| beforeAddOpenFunc | `Function` | - | 新增弹窗打开前回调函数 |
+| beforeEditOpenFunc | `Function` | - | 编辑弹窗打开前回调函数 |
 | deleteButton | `CellItemType\|Boolean` | `() => ({})` | 删除按钮配置 |
 | deleteFunc | `Function\|Boolean` | `false` | 删除操作函数 |
 | className | `String` | `$c.get("class").IPageRoot` | 根容器类名 |

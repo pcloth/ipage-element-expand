@@ -1,9 +1,10 @@
 ## 更新日志
 
 ### 2025-07-14
-版本更新到 `0.1.25`
+版本更新到 `0.1.26`
 1. 给ITable的TableOn添加了名称兼容模式，目前支持了`selection-change`和`selectionChange`两种写法
-2. 修复了一些已知的bug
+2. 修复`beforeEditOpenFunc`和`beforeAddOpenFunc`拼写错误，兼容旧模式到后续几个版本，请尽快调整
+3. 修复了一些已知的bug
 
 ### 2025-05-23
 更新版本到 `0.1.16`

@@ -222,6 +222,9 @@ export default {
             default: () => ({}),
         },
         // 新增表单打开前接口
+        beforeAddOpenFunc: {
+            type: Function,
+        },
         befoceAddOpenFunc: {
             type: Function,
             // default: (loadData) => {
@@ -234,6 +237,9 @@ export default {
             // default: (loadData) => {
             //     return Promise.resolve({...loadData.data});
             // },
+        },
+        beforeEditOpenFunc: {
+            type: Function,
         },
         deleteButton: {
             type: [Object, Boolean],
@@ -478,10 +484,16 @@ export default {
             let openApi = null;
             if (type === 'add') {
                 this.dialogTitle = this.addButton?.dialogTitle || '新增';
-                openApi = this.befoceAddOpenFunc;
+                openApi = this.beforeAddOpenFunc || this.befoceAddOpenFunc;
+                if(this.befoceAddOpenFunc){
+                    console.warn('befoceAddOpenFunc已废弃，请使用beforeAddOpenFunc');
+                }
             } else if (type === 'edit') {
                 this.dialogTitle = this.editButton?.dialogTitle || '编辑';
-                openApi = this.befoceEditOpenFunc;
+                openApi = this.beforeEditOpenFunc || this.befoceEditOpenFunc;
+                if(this.befoceEditOpenFunc){
+                    console.warn('befoceEditOpenFunc已废弃，请使用beforeEditOpenFunc');
+                }
             }
             if (openApi) {
                 this.showDialog = true;
