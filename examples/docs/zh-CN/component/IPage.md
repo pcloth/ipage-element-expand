@@ -19,6 +19,14 @@
                     ck:'1'
                 },
                 ipageProps:{
+                    tableOn:{
+                        // "selection-change": (selection,ld) => {
+                        //     console.log('selection1',selection,ld)
+                        // },
+                        selectionChange: (selection,ld) => {
+                            console.log('selection2',selection,ld)
+                        },
+                    },
                     searchProps:{
                         queryFunc:this.queryFunc
                     },
@@ -64,6 +72,11 @@
                         },
                     ],
                     columns:[
+                        {
+                            columnProps:{
+                                type:'selection'
+                            }
+                        },
                         {
                             columnProps:{
                                 prop:'name',

@@ -69,7 +69,7 @@ export default {
                 allItems: this.columns,
                 $table:this,
             }
-            return toEventsAppendParamsDeep(this.tableOn||{},loadData,this)
+            return toEventsAppendParamsDeep(this.tableOn||{},loadData,this,'-')
         }
     },
     methods:{

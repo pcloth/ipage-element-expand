@@ -114,7 +114,7 @@ export const getEvents = (item, onName, row) => {
 };
 
 /** 递归一个对象里面的，如果是方法，使用toEventsAppendParams包装 */
-export const toEventsAppendParamsDeep = (obj, row, that) => {
+export const toEventsAppendParamsDeep = (obj, row, that, keyMode='') => {
     const result = {};
     if(!obj) return obj;
     if(typeof obj==='string'){
@@ -126,9 +126,18 @@ export const toEventsAppendParamsDeep = (obj, row, that) => {
     }else if(obj instanceof RegExp){
         return obj;
     }
-    for (const key in obj) {
+    for (let key in obj) {
         if (Object.hasOwnProperty.call(obj, key)) {
             const value = obj[key];
+            if(keyMode){
+                if(keyMode === 'on' && !key.startsWith('on')){
+                    // 给方法包装on前缀
+                    key = `on${key[0].toUpperCase()}${key.slice(1)}`;
+                }else if(keyMode === '-'){
+                    // 使用-分割
+                    key = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+                }
+            }
             if (typeof value === "function") {
                 result[key] = _toEventsAppendParams_(value, key, row, that)
             }else if(Array.isArray(value)){
