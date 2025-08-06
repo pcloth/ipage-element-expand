@@ -1,6 +1,6 @@
 {
     "name": "ipage-element-expand",
-    "version": "0.1.26",
+    "version": "0.1.27",
     "keywords": [
         "ipage",
         "iform",
@@ -98,6 +98,7 @@
     ],
     "dependencies": {
         "js-export-excel": "^1.1.4",
-        "jszip": "^3.10.1"
+        "jszip": "^3.10.1",
+        "cropperjs": "^1.6.2"
     }
 }

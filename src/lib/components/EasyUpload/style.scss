@@ -1,0 +1,196 @@
+
+/**
+ * @module EasyUpload
+ * 图标风格：https://www.iconfont.cn/collections/detail?spm=a313x.collections_index.i1.d9df05512.45b13a81E2Y3gt&cid=19238
+ */
+.easy-upload {
+    --updoad-color: #1890ff;
+    --upload-bg: #fafafa;
+    --upload-border: #e7e7e7;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+    flex-wrap: wrap;
+    gap: 10px;
+    .easy-upload-review-item-outside {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        .easy-upload-review-item-title {
+            font-size: 12px;
+            padding: 3px 7px;
+            text-align: center;
+            color: #999;
+            width: calc(100% - 14px);
+            // 省略号
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .upload-no-data {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            color: #999;
+        }
+    }
+    .easy-upload-review-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        border-radius: 4px;
+        // border: 1px solid var(--upload-border);
+        box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        
+        &:hover {
+            .easy-upload-review-item-mask {
+                display: flex;
+            }
+        }
+
+        &.is-upload {
+            .easy-upload-review-item-mask {
+                display: none;
+            }
+        }
+
+        &.is-error {
+            box-shadow: inset 0 0 0 1px #F56C6C;
+        }
+
+        &-error {
+            position: absolute;
+            color: #F56C6C;
+            bottom: 0;
+            font-size: 13px;
+            pointer-events: none;
+        }
+
+        &--upload {
+            font-size: 14px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &:hover {
+                color: var(--updoad-color);
+                box-shadow: inset 0 0 0 1px var(--updoad-color);
+                cursor: pointer;
+            }
+        }
+
+        
+
+        &-mask {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            gap: 15px;
+            flex-wrap: wrap;
+            
+
+            &-btn-icon {
+                font-size: 20px;
+                width: 24px;
+                height: 30px;
+                object-fit: contain;
+                cursor: pointer;
+                &:hover {
+                    color: var(--updoad-color);
+                    opacity: 0.8;
+                }
+            }
+        }
+
+        .review-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background-color: var(--upload-bg);
+            font-weight: bold;
+            color: #333;
+        }
+    }
+}
+
+
+/** 
+ * 大图预览 和 剪裁
+ */
+.easy-upload-reviewbig-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .easy-upload-reviewbig-mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .easy-upload-reviewbig-content {
+        position: relative;
+        background-color: #fff;
+        border-radius: 4px;
+        max-width: 100%;
+        max-height: 100%;
+        .easy-upload-reviewbig-content-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px;
+            cursor: pointer;
+            img {
+                width: 20px;
+                height: 20px;
+            }
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+        .easy-upload-reviewbig-content-image {
+            padding: 30px 25px;
+            height: 600px;
+            .image-review {
+                width: 100%;
+                height: 100%;
+                max-height: 500px;
+                object-fit: contain;
+            }
+            .video-review {
+                width: 100%;
+                height: 100%;
+                max-height: 500px;
+            }
+        }
+    }
+}
+

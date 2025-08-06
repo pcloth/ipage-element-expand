@@ -39,6 +39,7 @@
                             ...loadData.data
                         }
                     },
+                    showSuccessTips:false,
                     searchProps:{
                         queryFunc:this.queryFunc
                     },

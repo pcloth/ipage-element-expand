@@ -255,7 +255,17 @@ export default {
         className:{
             type:String,
             default: () => $c.get('class').IPageRoot
-        }
+        },
+        // 错误提示
+        showErrorTips: {
+            type: Boolean,
+            default: true,
+        },
+        // 成功提示
+        showSuccessTips: {
+            type: Boolean,
+            default: true,
+        },
     },
     data() {
         return {
@@ -501,8 +511,7 @@ export default {
                 try {
                     this.currentRow = await openApi(loadData);
                 } catch (error) {
-                    this.$message.error(error);
-                    console.log(error, '错误'); // eslint-disable-line
+                    this.showError(error);
                 } finally {
                     this.formLoading = false;
                 }
@@ -561,6 +570,22 @@ export default {
             this.showDialog = false;
             this.$emit('afterSubmit', data);
         },
+        showError(message) {
+            if(this.showErrorTips){
+                this.$message({
+                    type: 'error',
+                    message: message,
+                });
+            }
+        },
+        showSuccess(message) {
+            if(this.showSuccessTips){
+                this.$message({
+                    type: 'success',
+                    message: message,
+                });
+            }
+        },
         askDelete(loadData) {
             if (this.deleteFunc) {
                 this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
@@ -570,17 +595,11 @@ export default {
                 }).then(() => {
                     this.deleteFunc(loadData.data)
                         .then(() => {
-                            this.$message({
-                                type: 'success',
-                                message: '删除成功!',
-                            });
+                            this.showSuccess('删除成功!');
                             this.$refs.isearch.handleSearch();
                         })
                         .catch((error) => {
-                            this.$message({
-                                type: 'error',
-                                message: error,
-                            });
+                            this.showError(error);
                         });
                 });
             }
