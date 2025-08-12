@@ -1,6 +1,5 @@
 
-import { before } from 'node:test';
-import { imageTypes, createAccept } from './utils';
+// import { imageTypes, createAccept } from './utils';
 import { config as $c } from '../../config';
 
 export default {
@@ -116,7 +115,7 @@ export default {
             return $c.get('upload.ratioList')
         }
     },
-    modelValue: {
+    value: {
         type: [String, Array],
         default: ''
     },

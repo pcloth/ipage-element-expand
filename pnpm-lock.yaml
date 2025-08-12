@@ -31,11 +31,13 @@ specifiers:
   vue-router: ^3.1.5
   vue-template-compiler: ^2.6.10
   vuepress: ^1.9.10
+  watermarkjs: 2.1.1
 
 dependencies:
   cropperjs: 1.6.2
   js-export-excel: 1.1.4
   jszip: 3.10.1
+  watermarkjs: 2.1.1
 
 devDependencies:
   '@vue/cli-plugin-babel': 4.5.19_7tjwhrixkole4htl33ydtxb7gu
@@ -12196,6 +12198,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /watermarkjs/2.1.1:
+    resolution: {integrity: sha512-HDabpga8Fz5d61Z7gBkKO2cDsfViAU/mO5qIoWmDX92wJZLb7Dv4L+CwoHAqS4XkqWcYVGy/AF035BD1EN3v/g==}
+    dev: false
 
   /wbuf/1.7.3:
     resolution: {integrity: sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==}

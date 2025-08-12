@@ -37,7 +37,7 @@
                             <el-input v-model="currentHeight" size="small" :input-style="{ textAlign: 'right' }"
                                 @change="setZoomSize($event, 'height')"
                                 :disabled="!isLockSizeOutHeight || _parentLockSize">
-                                <template #prefix>宽度:</template>
+                                <template #prefix>高度:</template>
                                 <template #append> 像素 </template>
                             </el-input>
                         </div>
@@ -196,12 +196,10 @@ export default {
         return {
             watermarkTextValue: this.watermarkText,
             useWatermarkValue: this.useWatermark,
-            refCropper: null,
             previewSrc: "",
             previewInfo: {},
             currentWidth: 0,
             currentHeight: 0,
-            previewCanvasRef: null,
             isLockSizeOutWidth: false,
             isLockSizeOutHeight: false,
             clipping: false,
@@ -280,7 +278,7 @@ export default {
             if (this.isLockSize) {
                 return;
             }
-            const cropper = this.refCropper.cropper;
+            const cropper = this.$refs.refCropper.cropper;
             const box = cropper.getCropBoxData();
             const ratio = box.width / box.height;
             const has = this._mergeRatioList.find(item => item.value === ratio);
@@ -316,7 +314,7 @@ export default {
             data.x = Math.ceil(data.x);
             data.y = Math.ceil(data.y);
             this.previewInfo = data; //JSON.parse(JSON.stringify(data));
-            let canvas = this.refCropper.cropper.getCroppedCanvas();
+            let canvas = this.$refs.refCropper.cropper.getCroppedCanvas();
             if (this._parentLockSize) {
                 if (this.zoomLimit) {
                     let w = this.zoomLimit.width;
@@ -356,6 +354,7 @@ export default {
             canvas.style.maxWidth = "100%";
             canvas.style.maxHeight = "100%";
         
+            const previewCanvasRef = this.$refs.previewCanvasRef;
             if (this.useWatermarkValue) {
                 const watermarkText = this.watermarkTextValue;
                 const imgBolb = await this.canvasToBlob(canvas);
@@ -367,16 +366,16 @@ export default {
                     const ctx = canvas.getContext("2d");
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 };
-                this.previewCanvasRef.innerHTML = "";
-                this.previewCanvasRef.appendChild(canvas);
+                previewCanvasRef.innerHTML = "";
+                previewCanvasRef.appendChild(canvas);
             } else {
-                this.previewCanvasRef.innerHTML = "";
-                this.previewCanvasRef.appendChild(canvas);
+                previewCanvasRef.innerHTML = "";
+                previewCanvasRef.appendChild(canvas);
             }
         },
         
         setCopperSize() {
-            const cropper = this.refCropper.cropper;
+            const cropper = this.$refs.refCropper.cropper;
             this.previewInfo.width = +this.previewInfo.width;
             this.previewInfo.height = +this.previewInfo.height;
             this.previewInfo.x = +this.previewInfo.x;
@@ -410,7 +409,7 @@ export default {
         },
 
         async changeCurrentRatio(value) {
-            const cropper = this.refCropper.cropper;
+            const cropper = this.$refs.refCropper.cropper;
             if (value === -1) {
                 cropper.setAspectRatio(NaN);
                 cropper.clear();
@@ -439,7 +438,7 @@ export default {
         async onCropper() {
             await this.$nextTick();
             this.clipping = true;
-            const cropper = this.refCropper.cropper;
+            const cropper = this.$refs.refCropper.cropper;
             const canvasOptions = this.isLockSize
                 ? { width: this.width, height: this.height }
                 : {};
@@ -593,6 +592,18 @@ export default {
 
     .easy-upload-cropper-buttons {
         justify-content: flex-end;
+    }
+}
+
+.zoom-toolbox-row {
+    ::v-deep(.el-input__prefix) {
+        display: flex;
+        align-items: center;
+        padding-right: 5px;
+    }
+
+    ::v-deep(.el-input__inner) {
+        padding-left: 40px;
     }
 }
 </style>

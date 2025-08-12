@@ -7,6 +7,7 @@ import iTableColumn from './lib/components/ITableColumn.vue';
 import renderCell from './lib/components/RenderCell.vue';
 import splitDownloadAndExport from './lib/components/SplitDownloadAndExport.vue';
 import renderSelectLoadmore from './lib/components/RenderSelectLoadmore.vue';
+import easyUpload from './lib/components/EasyUpload/index.vue';
 export const config = $config
 export const IPage = ipage
 export const RenderCell = renderCell
@@ -16,8 +17,9 @@ export const IForm = iForm
 export const ITableColumn = iTableColumn
 export const SplitDownloadAndExport = splitDownloadAndExport
 export const RenderSelectLoadmore = renderSelectLoadmore
+export const EasyUpload = easyUpload;
 
-const components = {IPage,RenderCell,ISearch,ITable,IForm,ITableColumn,SplitDownloadAndExport,RenderSelectLoadmore};
+const components = {IPage,RenderCell,ISearch,ITable,IForm,ITableColumn,SplitDownloadAndExport,RenderSelectLoadmore,EasyUpload};
 
 const install = function (Vue) {
     Object.keys(components).forEach(key=>{

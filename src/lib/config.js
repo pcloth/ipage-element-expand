@@ -1,4 +1,5 @@
 import {deepAssign} from "./utils"
+import { imageTypes, createAccept } from './components/EasyUpload/utils';
 export const config = {
     options:{
         class:{
@@ -214,6 +215,74 @@ export const config = {
         /// ITable 相关参数
         tableProps:{},
         tableOn:{},
+        upload:{
+            /** 上传模式
+             * append: 追加模式，每次上传都会追加到原有的文件列表中
+             * template: 模板模式，每次上传都会替换原有的文件列表（模板模式里面可以控制每个文件的类型和尺寸限制）
+             */
+            mode: "append",
+            /**
+             * 是否允许缩放
+             */
+            useZoom: true,
+            /**
+             * forceZoom: 是否强制缩放，如果为true，会强制缩放到zoomLimit的限制
+             * useZoom为false的时候，forceZoom无效
+             */
+            forceZoom: false,
+            zoomLimit: undefined,
+            quality: 0.92,
+            convertExt: undefined,
+            useWatermark: false,
+            watermarkText: "",
+            allowChangeWatermarkText: false,
+            useCropper: true,
+            valueFormat: "string",
+            noDataText: "暂无数据",
+            valueSplit: ",",
+            valueProps: {
+                url: "url", // 文件路径
+                name: "name", // 如果没有name属性，会根据url属性获取文件名
+                type: "type", // img,video,file
+                accept: "accept", // 允许上传的文件类型，如果有它，优先使用它
+                poster: "poster", // 视频封面，只有type为video的时候有效
+                controls: "controls", // 视频在列表上是否显示控制条，只有type为video的时候有效
+                size: "size", // 文件最大大小
+                minSize: "minSize", // 文件最小尺寸
+                duration: "duration", // 视频时长，只有type为video的时候有效
+            },
+            disabled: false,
+            limit: 0,
+            size: 0,
+            minSize: 0,
+            accept: createAccept(imageTypes),
+            uploadClass: "easy-upload",
+            uploadButtonClass: "easy-upload-review-item easy-upload-review-item--upload",
+            uploadButtonText: "上传文件",
+            reviewClass: "easy-upload-review-item",
+            itemWidth: 100,
+            itemHeight: 100,
+            zIndex: 2500,
+            showItemTitle: true,
+            beforeRemove: null,
+            beforeUpload: null,
+            action: "",
+            headers: {},
+            data: {},
+            name: "file",
+            responseSrcPath: "data.linkPath",
+            uploadFunc: null,
+            ratioList: [
+                { label: "自由剪裁", value: 0, isDefault:true},
+                { label: "不剪裁", value: -1 },
+                { label: "正方形 1:1", value: 1 },
+                { label: "横屏 4:3", value: 4 / 3 },
+                { label: "横屏 16:9", value: 16 / 9 },
+                { label: "竖屏 3:4", value: 3 / 4 },
+                { label: "竖屏 9:16", value: 9 / 16 }
+            ],
+            zoomFunc: null
+        },
         /** 扩展渲染组件，请用jsx直接传入vnode */
         extendedRenderCell:{
             

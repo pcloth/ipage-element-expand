@@ -1,20 +1,20 @@
 import watermark from "watermarkjs";
 
 /** 生成uuid */
-export const getUuid = (len: number, radix: number) => {
+export const getUuid = (len, radix) => {
     const chars =
         "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split(
             ""
         );
     const uuid = [];
-    let i: number;
+    let i;
     radix = radix || chars.length;
     if (len) {
         // Compact form
         for (i = 0; i < len; i++) uuid[i] = chars[0 | (Math.random() * radix)];
     } else {
         // rfc4122, version 4 form
-        let r: number;
+        let r;
 
         // rfc4122 requires these characters
         uuid[8] = uuid[13] = uuid[18] = uuid[23] = "-";
@@ -33,14 +33,17 @@ export const getUuid = (len: number, radix: number) => {
     return uuid.join("");
 };
 
-export const testIsBase64 = (fileStr: string) => {
+export const testIsBase64 = (fileStr) => {
     return /^data:image/.test(fileStr);
 };
 
-export const getFileSuffix = (src: string) => {
+export const getFileSuffix = (src) => {
     const isBase64 = testIsBase64(src)
     if (isBase64) {
         return 'BASE64'
+    }
+    if(!src){
+        return 'UNKNOWN'
     }
     // 根据文件后缀判断文件类型
     const suffix = src.split('.').pop() || ""
@@ -51,11 +54,11 @@ export const getFileSuffix = (src: string) => {
 export const imageTypes = ['PNG', 'JPG', 'JPEG']
 export const videoTypes = ['MP4', 'AVI']
 
-export const createAccept = (types: string[]) => {
+export const createAccept = (types) => {
     return types.map(item => `.${item.toLowerCase()}`).join(',')
 }
 
-export const fileType = (src: string) => {
+export const fileType = (src) => {
     const isBase64 = testIsBase64(src)
     if (isBase64) {
         return 'img'
@@ -72,7 +75,7 @@ export const fileType = (src: string) => {
     return 'file'
 }
 
-export const getName = (item: any) => {
+export const getName = (item) => {
     if (typeof item === "string") {
         // 是一个url或者base64图片
         if (item.indexOf("base64") !== -1) {
@@ -93,7 +96,7 @@ export const getName = (item: any) => {
 };
 
 /** 生成hash */
-export const getHash = (str: string) => {
+export const getHash = (str) => {
     let hash = 0;
     if (str.length == 0) return hash;
     for (let i = 0; i < str.length; i++) {
@@ -107,7 +110,7 @@ export const getHash = (str: string) => {
 /** 
  * 把一个未知方法封装成promise，它可能是一个异步方法，也可能是一个同步方法
  */
-export const promisify = (fn: Function, ...args: any[]) => {
+export const promisify = (fn, ...args) => {
     return new Promise((resolve, reject) => {
         try {
             const result = fn(...args);
@@ -119,7 +122,7 @@ export const promisify = (fn: Function, ...args: any[]) => {
 };
 
 
-const createMultipleWatermarks = function (target: any,waterText: string, watermark: any) {
+const createMultipleWatermarks = function (target, waterText, watermark) {
     const context = target.getContext("2d");
     const text = waterText;
     // Set watermark style
@@ -172,11 +175,11 @@ const createMultipleWatermarks = function (target: any,waterText: string, waterm
 /** 
  * 生成水印
  */
-export const makeWatermark = (file: any, text = "", func: Function | null = null) => {
+export const makeWatermark = (file, text = "", func = null) => {
     if (!func) {
         func = createMultipleWatermarks
     }
-    const outFunc = (target: any) => {
+    const outFunc = (target) => {
         const obj =  func(target, text, watermark);
         if(typeof obj === 'function'){
             return obj(target);
@@ -195,7 +198,7 @@ export const makeWatermark = (file: any, text = "", func: Function | null = null
  * @param {Number} zoomLimit.height 高度限制
  * @returns {Promise} 返回一个promise
  */
-export const zoomImage = (src: string|Blob, zoomLimit: { width?: number; height?: number }={}) => {
+export const zoomImage = (src, zoomLimit={}) => {
     return new Promise((resolve, reject) => {
         const img = new Image();
         if(typeof src === 'string'){
@@ -206,7 +209,7 @@ export const zoomImage = (src: string|Blob, zoomLimit: { width?: number; height?
         }
         img.onload = () => {
             const canvas = document.createElement("canvas");
-            const context = canvas.getContext("2d") as CanvasRenderingContext2D;
+            const context = canvas.getContext("2d");
             const { width, height } = img;
             const { width: limitWidth, height: limitHeight } = zoomLimit;
             let scale = 1;
@@ -238,9 +241,9 @@ export const zoomImage = (src: string|Blob, zoomLimit: { width?: number; height?
  * @param {Boolean} immediate 是否立即执行
  * @returns {Function} 返回一个防抖函数
  */
-export const debounce = (fn: Function, delay: number, immediate: boolean) => {
-    let timer: any = null;
-    return function (...args: any[]) {
+export const debounce = (fn, delay, immediate) => {
+    let timer = null;
+    return function (...args) {
         if (timer) {
             clearTimeout(timer);
         }
@@ -256,8 +259,8 @@ export const debounce = (fn: Function, delay: number, immediate: boolean) => {
 /** 
  * 
  */
-export const suffixToType = (suffix: string) => {
-    const typeMaps:any = {
+export const suffixToType = (suffix) => {
+    const typeMaps = {
         jpg: 'image/jpeg',
         jpeg: 'image/jpeg',
         png: 'image/png',
@@ -270,7 +273,7 @@ export const suffixToType = (suffix: string) => {
 /**
  * 图片文件文件名获取到canvas格式。
  */
-export const getFileFormatToCanvasType = (fileName: string="") => {
+export const getFileFormatToCanvasType = (fileName="") => {
     const fileExtension = fileName.split('.').pop().toLowerCase();
     const canvasType = suffixToType(fileExtension);
     return canvasType;
@@ -282,7 +285,7 @@ export const getFileFormatToCanvasType = (fileName: string="") => {
  * @param {String} path 路径，支持.分割
  * @param {String} defaultValue 默认值
  */
-export const getObjectValueByPath = (obj: any, path: string, defaultValue: any) => {
+export const getObjectValueByPath = (obj, path, defaultValue) => {
     const paths = path.split('.');
     let result = obj;
     for (let i = 0; i < paths.length; i++) {

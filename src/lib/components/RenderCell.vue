@@ -19,6 +19,7 @@ import Renderer from "./Renderer.vue";
 import RenderCell from "./RenderCell.vue";
 import RSelectLoadMore from "./RenderSelectLoadmore"
 import SplitDownloadAndExport from "./SplitDownloadAndExport"
+import EasyUpload from "./EasyUpload/index.vue";
 
 const cellProps = {
     value: {
@@ -314,6 +315,9 @@ export default {
             break;
         case "input-number":
             dom = <el-input-number  />;
+            break;
+        case "easy-upload":
+            dom = <EasyUpload/>;
             break;
         case "select":
             dom = (

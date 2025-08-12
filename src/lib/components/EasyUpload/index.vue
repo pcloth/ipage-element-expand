@@ -1,8 +1,8 @@
 <template>
     <div :class="uploadClass">
         <slot :fileList="fileList" name="default">
-            <template v-for="(file, idx) in fileList" :key="file.uuid">
-                <div class="easy-upload-review-item-outside">
+            <template v-for="(file, idx) in fileList" >
+                <div class="easy-upload-review-item-outside" :key="file.uuid">
                     <div :style="mergeReviewItemStyle" :class="mergeReviewClass(file)">
                         <!-- 如果是template模式下，如果没有图片，显示上传按钮 -->
                         <template v-if="!disabled && mode === 'template' && !file[mergeValueProps.url]">
@@ -23,7 +23,7 @@
                             :poster="file[mergeValueProps.poster]" :controls="file[mergeValueProps.controls]"
                             :src="file[mergeValueProps.url]"></video>
                         <div v-else class="review-image">
-                            {{ getFileSuffix(file[mergeValueProps.url]) }}
+                            {{ getFileSuffix(file[mergeValueProps.url],file) }}
                         </div>
                         <div class="easy-upload-review-item-mask">
                             <img @click.stop="viewImage(file)" title="预览"
@@ -73,8 +73,8 @@
                 </div>
             </div>
         </slot>
-        <ReviewBox :zIndex="zIndex" :show="showReviewBox" @update:show="val => showReviewBox = val" :src="currentSrc" :isVideo="currentSrcIsVideo" />
-        <Cropper @cancel="cancelUpload" :show="showCropper" @update:show="val => showCropper = val" :zIndex="zIndex" :src="currentSrc"
+        <ReviewBox :zIndex="zIndex" :show.sync="showReviewBox" :src="currentSrc" :isVideo="currentSrcIsVideo" />
+        <Cropper @cancel="cancelUpload" :show.sync="showCropper" :zIndex="zIndex" :src="currentSrc"
             :ratioList="ratioList"
             :src-item="currentItem" :useWatermark="useWatermark" :quality="quality" :useZoom="useZoom"
             :forceZoom="forceZoom" :uploadLoading="uploadLoading" :zoomLimit="zoomLimit"
@@ -138,13 +138,13 @@ export default {
                 style_['width'] = this.itemWidth + 'px'
             } else {
                 style_['width'] = this.itemWidth
-            };
+            }
 
             if (typeof this.itemHeight === 'number') {
                 style_['height'] = this.itemHeight + 'px'
             } else {
                 style_['height'] = this.itemHeight
-            };
+            }
             return style_;
         },
         
@@ -190,28 +190,22 @@ export default {
             }
             return status
         }
-
-
-
-const mergeValueProps = computed(() => {
-    const default_ = $c.get('upload.valueProps')||{}
-    return {
-        ...(default_||{}),
-        ...(props.valueProps||{}),
-    }
-})
-
     },
     watch: {
-        modelValue: {
+        value: {
             handler() {
-                // 监听modelValue变化
+                // 监听value变化
                 this.fileList = this.getModelValue();
             },
             immediate: true
         }
     },
+    mounted() {
+        // 初始化文件列表
+        // this.fileList = this.getModelValue();
+    },
     methods: {
+        getFileSuffix,
         _getFileType(item) {
             return fileType(item[this.mergeValueProps.url] || "")
         },
@@ -219,62 +213,64 @@ const mergeValueProps = computed(() => {
         /** 从modelvalue获取文件列表 */
         getModelValue() {
             let arr = [];
-            if (!this.modelValue) return arr;
+            if (!this.value) return arr;
             if (this.valueFormat === "array") {
-                arr = this.modelValue;
+                arr = this.value;
             } else if(this.valueFormat === "array<object>"){
                 // 追加模式的array-object，直接返回当前文件列表
-                arr = this.modelValue
+                arr = this.value
             } else if (this.valueFormat === "string") {
-                if (!this.modelValue) {
+                if (!this.value) {
                     arr = [];
-                } else if (typeof this.modelValue === "string") {
-                    if (testIsBase64(this.modelValue)) {
+                } else if (typeof this.value === "string") {
+                    if (testIsBase64(this.value)) {
+                        const uuid_ = getUuid(12, 17);
                         return [
                             {
-                                uuid: getUuid(12, 17),
-                                name: "base64图片" + getUuid(4, 17) + ".png",
-                                src: this.modelValue,
+                                uuid: uuid_,
+                                [this.mergeValueProps.name]: `base64图片${uuid_}.png`,
+                                [this.mergeValueProps.url]: this.value,
                                 status: "success",
-                                isBase64: true
+                                isBase64: true,
+                                [this.mergeValueProps.url]: 'img'
                             }
                         ];
                     }
-                    arr = this.modelValue.split(this.valueSplit).filter(item => item);
-                } else if (Array.isArray(this.modelValue)) {
-                    arr = this.modelValue;
+                    arr = this.value.split(this.valueSplit).filter(item => item);
+                } else if (Array.isArray(this.value)) {
+                    arr = this.value;
                 } else {
                     console.error(
                         "ve-cropper组件valueFormat配置错误1",
-                        this.modelValue
+                        this.value
                     );
                 }
             } else {
-                console.error("ve-cropper组件valueFormat配置错误2", this.modelValue);
+                console.error("ve-cropper组件valueFormat配置错误2", this.value);
             }
             arr = arr.map((item) => {
                 if (typeof item === 'object') {
                     if (!item.uuid) item.uuid = getUuid(12, 17);
-                    if (!item.name) item.name = getName(item[this.mergeValueProps.url]);
+                    if (!item[this.mergeValueProps.name]) item[this.mergeValueProps.name] = getName(item[this.mergeValueProps.url]);
                     if (!item.status) item.status = "success";
-                    if (!item.type) item.type = fileType(item[this.mergeValueProps.url]);
+                    if (!item[this.mergeValueProps.type]) item[this.mergeValueProps.type] = fileType(item[this.mergeValueProps.url]);
                     return item
                 }
                 const obj = this.fileList.find((it) => it[this.mergeValueProps.url] === item);
                 const uuid = obj?.uuid || getUuid(12, 17);
-                const name = obj?.name || getName(item);
+                const name = obj?.[this.mergeValueProps.name] || getName(item);
                 return {
                     uuid,
                     [this.mergeValueProps.name]: name,
                     [this.mergeValueProps.url]: item,
                     status: "success",
-                    type: fileType(item)
+                    [this.mergeValueProps.type]: fileType(item)
                 };
             });
             return arr;
         },
 
-        /** 输出modelValue */
+        /** 输出value */
         outPutValue() {
             let arr = [];
             if (this.mode === 'template') {
@@ -283,7 +279,7 @@ const mergeValueProps = computed(() => {
                     const { raw, ...rest } = item
                     return rest
                 })
-                this.$emit("update:modelValue", outarr);
+                this.$emit("input", outarr);
                 return
             }
             this.fileList.forEach((item) => {
@@ -292,74 +288,20 @@ const mergeValueProps = computed(() => {
                 }
             });
             if (this.valueFormat === "array") {
-                this.$emit("update:modelValue", arr);
+                this.$emit("input", arr);
             } else if(this.valueFormat === "array<object>"){
                 // 追加模式的array-object，直接返回当前文件列表
                 arr = this.fileList.map((item) => {
                     const { raw, ...rest } = item
                     return rest
                 })
-                this.$emit("update:modelValue", arr);
+                this.$emit("input", arr);
             } else if (this.valueFormat === "string") {
-                this.$emit("update:modelValue", arr.join(this.valueSplit));
+                this.$emit("input", arr.join(this.valueSplit));
             } else {
                 console.error("ve-cropper组件valueFormat配置错误");
             }
         },
-
-const mergeReviewItemStyle = computed(() => {
-    const style_: any = {};
-    if (typeof props.itemWidth === 'number') {
-        style_['width'] = props.itemWidth + 'px'
-    } else {
-        style_['width'] = props.itemWidth
-    };
-
-    if (typeof props.itemHeight === 'number') {
-        style_['height'] = props.itemHeight + 'px'
-    } else {
-        style_['height'] = props.itemHeight
-    };
-    return style_;
-});
-
-const mergeItemTitleStyle = computed(() => {
-    const style_: any = {};
-    if (typeof props.itemWidth === 'number') {
-        style_['width'] = props.itemWidth + 'px'
-    } else {
-        style_['width'] = props.itemWidth
-    };
-    return style_;
-});
-
-const mergeReviewClass = computed((file: any) => {
-    return (file: any) => {
-        let status = file.status === 'success' ? 'success' : 'error'
-        return [props.reviewClass, {
-            'easy-upload-review-item-disabled': props.disabled,
-            'easy-upload-review-item-template': props.mode === 'template',
-            'is-upload': props.mode === 'template' && !file[mergeValueProps.value.url],
-            'is-error': file.status === 'error',
-        }]
-    }
-});
-
-const mergeUploadButtonClass = computed((file: any) => {
-    return (file: any) => {
-        return [props.uploadButtonClass, 'template-upload', {
-            'is-error': file?.status === 'error',
-        }]
-    }
-});
-
-watch(() => props.modelValue, (newVal) => {
-    // 监听modelValue变化
-    fileList.value = getModelValue();
-}, { immediate: true });
-
-
-
         /**
          * 
          * status:  
@@ -432,7 +374,7 @@ watch(() => props.modelValue, (newVal) => {
                 return;
             }
             // 尺寸和文件文件检查
-            if (!this.beforeUpload(file, this.currentItem)) {
+            if (!this._pBeforeUpload(file, this.currentItem)) {
                 return;
             }
             this.currentItem.status = 'waitUpload';
@@ -460,10 +402,9 @@ watch(() => props.modelValue, (newVal) => {
                 await self.prepareToUpload(self.currentItem);
             };
         },
-
-        beforeUpload(file, templateItem) {
+        _pBeforeUpload(file, templateItem) {
             // 检查文件类型和大小
-            const ext = file.name.split('.').pop();
+            const ext = (file.name || '').split('.').pop();
             const accept = templateItem[this.mergeValueProps.accept] || this.accept;
             if (!accept || accept.includes('*.*')) {
                 // 不限制文件类型
@@ -605,9 +546,6 @@ watch(() => props.modelValue, (newVal) => {
                 }, convertType, self.quality);
             };
         },
-
-}
-
         async uploadFile(fileItem) {
             // 上传文件
             const formData = new FormData();
