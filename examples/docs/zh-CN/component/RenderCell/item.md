@@ -30,8 +30,54 @@
 |canShowFunc|function|等同于show，接收参数loadData|`undefined`|
 |formItemProps|object|如果isFormItem=true的时候，父级el-form-item组件的props参数|{}|
 |isFormItem|boolen|是否在父级添加el-form-item组件|true|
+|mask|`string` 、 `Array<string>` 、 `Object`|限定输入范围，详情可以查看mask属性，如果全局安装后，可以直接使用v-ipage-mask指令，只有slot="input"可用||
+|money|object|限定输入为金额格式，查看下方money属性，如果全局安装后，可以直接使用v-ipage-money指令，只有slot="input"可用|{min: 0,precision: 2, max: Number.MAX_SAFE_INTEGER, complete: true}|
 |...rest|any|其他属性，将传递给实际的组件|{}|
 
+## item.mask 属性
+
+> 此功能代码来自于[vue-the-mask](https://www.npmjs.com/package/vue-the-mask)
+
+
+#### 方法一：传入字符串或者数组字符串，表示如下默认值：
+```
+    mask:"##-###"
+```
+表示接收2位数的数字加横线+3位的数字
+::: tip
+    其中默认的规则有：
+        C: { pattern: /[\u4e00-\u9fa5]/ },
+        "#": { pattern: /\d/ },
+        X: { pattern: /[0-9a-zA-Z]/ },
+        S: { pattern: /[a-zA-Z]/ },
+        A: { pattern: /[a-zA-Z]/, transform: v => v.toLocaleUpperCase() },
+        a: { pattern: /[a-zA-Z]/, transform: v => v.toLocaleLowerCase() },
+        "!": { escape: true }
+:::
+
+#### 方法二：传入对象，表示自定义规则，比如：
+```
+        mask:{
+            mask:"ff",
+            tokens:{
+                f:{
+                    pattern: /[a-zA-Z]/, 
+                    transform: v => v.toLocaleUpperCase() 
+                }
+            }
+        }
+```
+:::tip
+它将只接收2个英文，并转换成大写
+:::
+
+## item.money 属性
+|属性|类型|说明|默认值|
+|--|--|--|--|
+|min|number|允许输入的最小值，它如果是负数，则允许输入负数|0|
+|max|number|允许输入的最大值，它如果是负数，则只允许输入负数|`Number.MAX_SAFE_INTEGER`|
+|precision|number|小数位数|2|
+|complete|boolen|是否给小数位数添0补位，你如果在默认值的情况下输入0.5，失去焦点的时候将会变为0.50|true|
 
 ## loadData 荷载数据
 传递给组件方法的有如下数据：`item`、`data`、`qData`、`allItems`、`$rcell`

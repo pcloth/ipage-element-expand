@@ -1,5 +1,10 @@
 ## 更新日志
 
+### 2026-04-14
+版本更新到 `0.1.28`
+1. RenderCell.item属性中增加了mask指令和money指令属性
+2. 也可以直接使用v-ipage-mask和v-ipage-money指令直接给el-input添加能力；
+
 ### 2025-07-14
 版本更新到 `0.1.26`
 1. 给ITable的TableOn添加了名称兼容模式，目前支持了`selection-change`和`selectionChange`两种写法

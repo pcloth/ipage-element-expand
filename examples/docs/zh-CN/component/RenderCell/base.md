@@ -27,7 +27,7 @@
                         input:(value,loadData)=>{
                             console.log('input',value,loadData)
                         }
-                    }
+                    },
                 }
             }
         }

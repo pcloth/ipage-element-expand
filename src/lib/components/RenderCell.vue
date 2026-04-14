@@ -20,6 +20,8 @@ import RenderCell from "./RenderCell.vue";
 import RSelectLoadMore from "./RenderSelectLoadmore"
 import SplitDownloadAndExport from "./SplitDownloadAndExport"
 import EasyUpload from "./EasyUpload/index.vue";
+import ipageMask from "../directives/mask/directive";
+import ipageMoney from "../directives/money/index";
 
 const cellProps = {
     value: {
@@ -66,6 +68,7 @@ export default {
     components:{RenderCell,RSelectLoadMore},
     name: "RenderCell",
     props: cellProps,
+    directives: { ipageMask, ipageMoney },
     data(){
         return {
             currentValue:this.value
@@ -203,7 +206,6 @@ export default {
         tip,
         span,
         slot,
-        mask,
         options=[],
         directives=[],
         render,
@@ -216,6 +218,8 @@ export default {
         formItemProps={},
         canShowFunc,
         isFormItem, // 如果有item内部参数isFormItem，以这个为优先
+        mask,
+        money,
         ...rest
     } = this._props.item;
     const $props = this._props;
@@ -307,11 +311,7 @@ export default {
             needEvent = false;
             break;
         case "input":
-            dom = mask ? (
-                <el-input v-mask={mask}/>
-            ) : (
-                <el-input/>
-            );
+            dom = <el-input/>
             break;
         case "input-number":
             dom = <el-input-number  />;
@@ -514,6 +514,14 @@ export default {
     }
     if (directives && !dom.data.directives) {
         dom.data.directives = directives;
+    }
+    if(mask){
+        dom.data.directives = dom.data.directives || []
+        dom.data.directives.push({name:'ipage-mask',value:mask})
+    }
+    if(money){
+        dom.data.directives = dom.data.directives || []
+        dom.data.directives.push({name:'ipage-money',value:money})
     }
     if (needVModel) {
         this.checkDomData(dom)
