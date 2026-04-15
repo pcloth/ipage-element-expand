@@ -46,7 +46,7 @@
                                 file.title || file.name || ''
                             }}</div>
                     </slot>
-                    <div v-if="file?.status === 'error'" class="easy-upload-review-item-error">
+                    <div v-if="file && file.status === 'error'" class="easy-upload-review-item-error">
                         <!-- 上传失败 -->
                         {{ file.error }}
                     </div>
@@ -68,8 +68,8 @@
                     + {{ uploadButtonText }}
 
                 </div>
-                <div v-if="currentItem?.status === 'error'" class="easy-upload-review-item-error">
-                    {{ currentItem?.error }}
+                <div v-if="currentItem && currentItem.status === 'error'" class="easy-upload-review-item-error">
+                    {{ currentItem && currentItem.error }}
                 </div>
             </div>
         </slot>
